@@ -1,8 +1,9 @@
-import { IAssetManager, IChannelManager } from "eyevinn-channel-engine";
+import { IAssetManager, IChannelManager, IStreamSwitchManager } from "eyevinn-channel-engine";
 
 export interface PluginInterface {
-  newAssetManager: () => IAssetManager; // to be fixed
-  newChannelManager: () => IChannelManager; // to be fixed
+  newAssetManager: () => IAssetManager; 
+  newChannelManager: () => IChannelManager;
+  newStreamSwitchManager: () => IStreamSwitchManager;
 }
 
 export class BasePlugin {
@@ -10,5 +11,9 @@ export class BasePlugin {
 
   constructor(name: string) {
     this.pluginName = name;
+  }
+
+  getPluginName(): string {
+    return this.pluginName;
   }
 }

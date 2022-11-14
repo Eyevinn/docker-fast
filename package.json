@@ -22,6 +22,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "eyevinn-channel-engine": "^3.4.0"
+    "@eyevinn/schedule-service-adapter": "^0.3.3",
+    "eyevinn-channel-engine": "^3.4.3"
   }
 }

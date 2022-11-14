@@ -1,6 +1,6 @@
 import { IAssetManager, IChannelManager, 
   VodRequest, VodResponse, 
-  Channel, ChannelProfile 
+  Channel, ChannelProfile, IStreamSwitchManager 
 } from "eyevinn-channel-engine";
 import { BasePlugin, PluginInterface } from "./plugin_interface";
 
@@ -27,25 +27,23 @@ class AssetManager implements IAssetManager {
     };
   }
 
-  getNextVod(vodRequest: VodRequest): Promise<VodResponse> {
-    return new Promise((resolve, reject) => {
-      const channelId = vodRequest.playlistId;
-      if (this.assets[channelId]) {
-        let vod = this.assets[channelId][this.pos[channelId]++];
-        if (this.pos[channelId] > this.assets[channelId].length - 1) {
-          this.pos[channelId] = 0;
-        }
-        const vodResponse = {
-          id: vod.id,
-          title: vod.title,
-          uri: vod.uri,
-        };
-        resolve(vodResponse);
+  async getNextVod(vodRequest: VodRequest): Promise<VodResponse> {
+    const channelId = vodRequest.playlistId;
+    if (this.assets[channelId]) {
+      let vod = this.assets[channelId][this.pos[channelId]++];
+      if (this.pos[channelId] > this.assets[channelId].length - 1) {
+        this.pos[channelId] = 0;
       }
-      else {
-        reject("Invalid channelId provided");
-      }
-    });
+      const vodResponse = {
+        id: vod.id,
+        title: vod.title,
+        uri: vod.uri,
+      };
+      return vodResponse;
+    }
+    else {
+      throw new Error("Invalid channelId provided");
+    }
   }
 }
 
@@ -64,11 +62,19 @@ class ChannelManager implements IChannelManager {
 }
 
 export class DemoPlugin extends BasePlugin implements PluginInterface  {
+  constructor() {
+    super('Demo');
+  }
+  
   newAssetManager(): IAssetManager {
     return new AssetManager();
   }
 
   newChannelManager(): IChannelManager {
     return new ChannelManager();
+  }
+
+  newStreamSwitchManager(): IStreamSwitchManager {
+    return undefined;
   }
 }
