@@ -9,7 +9,8 @@
     "dev": "NODE_ENV=development tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node --inspect ./dist/server.js\"",
     "server": "node ./dist/server.js",
     "start": "npm run server",
-    "test": "jest"
+    "test": "jest",
+    "dev:docs": "mkdocs serve"
   },
   "author": "Eyevinn Technology <work@eyevinn.se>",
   "contributors": [
