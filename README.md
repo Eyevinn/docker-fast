@@ -23,6 +23,13 @@ docker run -d -p 8000:8000 -e FAST_PLUGIN=Demo \
 
 Stream URL to address your HLS video player is then: `http://localhost:8000/channels/<channelId>/master.m3u8`
 
+### Options
+
+The following environment variables can be set:
+
+- `PORT`: Which port to bind the service to.
+- `FAST_PLUGIN`: Which plugin to use.
+
 ## Plugins
 
 Specify plugin to use by setting the `FAST_PLUGIN` environment variable, e.g.
@@ -36,10 +43,14 @@ docker run -d -p 8000:8000 \
 
 The following plugins are available.
 
-| Plugin | Desc | Options |
-| ------ | ---- | ------- |
-| Demo   | Random selection from a pre-defined static list of assets | n/a |
-| ScheduleService | Fetches schedule and channels from [Eyevinn Schedule Service](https://github.com/Eyevinn/schedule-service) | `SCHEDULE_SERVICE_API_URL`: URL to API endpoint |
+| Plugin | Desc |
+| ------ | ---- |
+| Demo   | Random selection from a pre-defined static list of assets |
+| ScheduleService | Fetches schedule and channels from an [Eyevinn Schedule Service](https://github.com/Eyevinn/schedule-service) |
+
+### Schedule Service Plugin Options
+
+- `SCHEDULE_SERVICE_API_URL`: URL to Schedule Service API endpoint.
 
 ## Contributing
 
