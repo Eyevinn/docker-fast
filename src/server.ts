@@ -1,4 +1,4 @@
-import ChannelEngine from 'eyevinn-channel-engine';
+import { ChannelEngine } from 'eyevinn-channel-engine';
 import { PluginFactory } from './plugin_factory';
 
 const pluginName = process.env.FAST_PLUGIN || "demo";

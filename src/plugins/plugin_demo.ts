@@ -1,6 +1,10 @@
+import { IAssetManager, IChannelManager, 
+  VodRequest, VodResponse, 
+  Channel, ChannelProfile 
+} from "eyevinn-channel-engine";
 import { BasePlugin, PluginInterface } from "./plugin_interface";
 
-class AssetManager {
+class AssetManager implements IAssetManager {
   private assets;
   private pos;
   constructor() {
@@ -23,7 +27,7 @@ class AssetManager {
     };
   }
 
-  getNextVod(vodRequest) {
+  getNextVod(vodRequest: VodRequest): Promise<VodResponse> {
     return new Promise((resolve, reject) => {
       const channelId = vodRequest.playlistId;
       if (this.assets[channelId]) {
@@ -45,12 +49,12 @@ class AssetManager {
   }
 }
 
-class ChannelManager {
-  getChannels() {
+class ChannelManager implements IChannelManager {
+  getChannels(): Channel[] {
     return [{ id: "1", profile: this._getProfile() }];
   }
 
-  _getProfile() {
+  _getProfile(): ChannelProfile[] {
     return [
       { bw: 6134000, codecs: "avc1.4d001f,mp4a.40.2", resolution: [1024, 458] },
       { bw: 2323000, codecs: "avc1.4d001f,mp4a.40.2", resolution: [640, 286] },
@@ -60,11 +64,11 @@ class ChannelManager {
 }
 
 export class DemoPlugin extends BasePlugin implements PluginInterface  {
-  newAssetManager() {
+  newAssetManager(): IAssetManager {
     return new AssetManager();
   }
 
-  newChannelManager() {
+  newChannelManager(): IChannelManager {
     return new ChannelManager();
   }
 }

@@ -22,6 +22,6 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "eyevinn-channel-engine": "^3.3.11"
+    "eyevinn-channel-engine": "^3.4.0"
   }
 }

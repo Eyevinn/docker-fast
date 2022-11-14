@@ -1,6 +1,8 @@
+import { IAssetManager, IChannelManager } from "eyevinn-channel-engine";
+
 export interface PluginInterface {
-  newAssetManager: () => any; // to be fixed
-  newChannelManager: () => any; // to be fixed
+  newAssetManager: () => IAssetManager; // to be fixed
+  newChannelManager: () => IChannelManager; // to be fixed
 }
 
 export class BasePlugin {
