@@ -1,0 +1,38 @@
+version: "3.9"
+networks:
+  fast-net:
+    driver: bridge
+
+services:
+  schedule-service:
+    depends_on:
+      - ddb
+    image: eyevinntechnology/schedule-service
+    environment:
+      - PORT=8080
+      - IF=0.0.0.0
+      - DB=dynamodb://ddb:8000/eu-north-1
+      - DB_TABLE_PREFIX=local
+      - AWS_ACCESS_KEY_ID=null
+      - AWS_SECRET_ACCESS_KEY=null
+      - DEMO_TENANT=schedule-service:8080
+    ports:
+      - 8080:8080
+    networks:
+      - fast-net
+  ddb:
+    image: amazon/dynamodb-local
+    networks:
+      - fast-net
+  engine:
+    depends_on:
+      - schedule-service
+    image: eyevinntechnology/fast-engine
+    environment:
+      - FAST_PLUGIN=ScheduleService
+      - SCHEDULE_SERVICE_API_URL=http://schedule-service:8080/api/v1
+      - DEBUG=schedule-service-*
+    ports:
+      - 8000:8000
+    networks:
+      - fast-net
