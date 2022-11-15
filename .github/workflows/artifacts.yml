@@ -1,0 +1,23 @@
+name: Attach artifacts to tags
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  attach_artifact:
+    name: Attach artifact to tag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "docker-compose.yml"
+          token: ${{ github.token }}
+
