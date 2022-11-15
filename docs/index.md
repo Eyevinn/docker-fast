@@ -4,7 +4,7 @@ The Sustainable FAST Channel Engine
 
 ---
 
-Based on VOD2Live Technology and the [open source Eyevinn Channel Engine library](https://github.com/Eyevinn/channel-engine) you can generate a numerous amounts of FAST channels with a fraction of energy consumption compared to live transcoded FAST channels.
+Based on VOD2Live Technology and the [open source Eyevinn Channel Engine library](https://vod2live.docs.eyevinn.technology) you can generate a numerous amounts of FAST channels with a fraction of energy consumption compared to live transcoded FAST channels.
 
 ## Quick Start
 
