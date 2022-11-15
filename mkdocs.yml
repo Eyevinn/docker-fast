@@ -4,8 +4,8 @@ site_description: The Sustainable FAST Channel Engine
 site_author: Eyevinn Team
 nav:
   - Home: index.md
+  - Plugins: plugins.md
 theme:
-  name: mkdocs
-  locale: en
+  name: material
   
 copyright: Copyright &copy; 2022 <a href="https://www.eyevinn.se">Eyevinn Technology AB</a>

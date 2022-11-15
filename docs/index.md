@@ -4,7 +4,9 @@ The Sustainable FAST Channel Engine
 
 ---
 
-Based on VOD2Live Technology and the [open source Eyevinn Channel Engine library](https://github.com/Eyevinn/channel-engine) you can generate a numerous amounts of FAST channels with a fraction of energy consumption compared to live transcoded FAST channels.
+Based on VOD2Live Technology and the [open source Eyevinn Channel Engine library](https://vod2live.docs.eyevinn.technology) you can generate a numerous amounts of FAST channels with a fraction of energy consumption compared to live transcoded FAST channels.
+
+![Screenshot](images/screenshot.png)
 
 ## Quick Start
 
@@ -50,26 +52,20 @@ docker run -d -p 8000:8000 \
 The following environment variables can be set:
 
 - `PORT`: Which port to bind the service to.
-- `FAST_PLUGIN`: Which plugin to use.
+- `FAST_PLUGIN`: Which [plugin](plugins.md) to use.
 
-## Plugins
+## Support
 
-Specify plugin to use by setting the `FAST_PLUGIN` environment variable, e.g.
+Join our [community on Slack](http://slack.streamingtech.se) where you can post any questions regarding any of our open source projects. Eyevinn's consulting business can also offer you:
 
-```
-docker run -d -p 8000:8000 \
-  -e FAST_PLUGIN=ScheduleService \
-  -e SCHEDULE_SERVICE_API_URL=<api-url> \
-  eyevinntechnology/fast-engine
-```
+- Further development of this component
+- Customization and integration of this component into your platform
+- Support and maintenance agreement
 
-The following plugins are available.
+Contact [sales@eyevinn.se](mailto:sales@eyevinn.se) if you are interested.
 
-| Plugin | Desc |
-| ------ | ---- |
-| Demo   | Random selection from a pre-defined static list of assets |
-| ScheduleService | Fetches schedule and channels from an [Eyevinn Schedule Service](https://github.com/Eyevinn/schedule-service) |
+## About Eyevinn Technology
 
-### Schedule Service Plugin Options
+[Eyevinn Technology](https://www.eyevinntechnology.se) is an independent consultant firm specialized in video and streaming. Independent in a way that we are not commercially tied to any platform or technology vendor. As our way to innovate and push the industry forward we develop proof-of-concepts and tools. The things we learn and the code we write we share with the industry in [blogs](https://dev.to/video) and by open sourcing the code we have written.
 
-- `SCHEDULE_SERVICE_API_URL`: URL to Schedule Service API endpoint.
+Want to know more about Eyevinn and how it is to work here. Contact us at work@eyevinn.se!
