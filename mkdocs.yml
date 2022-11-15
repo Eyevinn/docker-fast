@@ -1,5 +1,5 @@
 site_name: FAST by Eyevinn Technology
-site_url: https://fast.eyevinn.technology
+site_url: https://fast.docs.eyevinn.technology
 site_description: The Sustainable FAST Channel Engine
 site_author: Eyevinn Team
 nav:
@@ -8,4 +8,6 @@ nav:
 theme:
   name: material
   
+use_directory_urls: false
+
 copyright: Copyright &copy; 2022 <a href="https://www.eyevinn.se">Eyevinn Technology AB</a>
