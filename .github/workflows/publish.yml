@@ -5,6 +5,22 @@ on:
     types: [published]
 
 jobs:
+  upload_artifacts:
+    name: Upload artifacts to release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Upload docker-compose.yml
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./docker-compose.yml
+          asset_name: docker-compose.yml
+
   push_to_registry:
     name: Push Docker Image to Docker Hub
     runs-on: ubuntu-latest
