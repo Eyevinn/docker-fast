@@ -1,7 +1,4 @@
-version: "3.9"
-networks:
-  fast-net:
-    driver: bridge
+version: "3.7"
 
 services:
   schedule-service:
@@ -18,12 +15,8 @@ services:
       - DEMO_TENANT=schedule-service:8080
     ports:
       - 8080:8080
-    networks:
-      - fast-net
   ddb:
     image: amazon/dynamodb-local
-    networks:
-      - fast-net
   engine:
     depends_on:
       - schedule-service
@@ -34,5 +27,3 @@ services:
       - DEBUG=schedule-service-*
     ports:
       - 8000:8000
-    networks:
-      - fast-net
