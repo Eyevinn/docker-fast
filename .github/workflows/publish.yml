@@ -20,6 +20,7 @@ jobs:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ./docker-compose.yml
           asset_name: docker-compose.yml
+          asset_content_type: text/plain
 
   push_to_registry:
     name: Push Docker Image to Docker Hub
