@@ -3,6 +3,8 @@
 
 [![Slack](http://slack.streamingtech.se/badge.svg)](http://slack.streamingtech.se)
 
+[ [DOCS](https://fast.docs.eyevinn.technology) | [DEMO](https://vod2live.eyevinn.technology) ]
+
 The FAST Channel Engine is a sustainable FAST Channel Engine based on VOD2Live technology and the open source [Channel Engine library](https://vod2live.docs.eyevinn.technology) from Eyevinn Technology.
 
 ## Quick Start
