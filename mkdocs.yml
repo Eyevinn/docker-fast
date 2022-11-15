@@ -4,6 +4,7 @@ site_description: The Sustainable FAST Channel Engine
 site_author: Eyevinn Team
 nav:
   - Home: index.md
+  - Plugins: plugins.md
 theme:
   name: material
   
