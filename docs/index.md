@@ -26,7 +26,7 @@ curl -X 'GET' \
 
 And to play the channel direct your HLS video player to the URL [http://localhost:8000/channels/eyevinn/master.m3u8](http://web.player.eyevinn.technology/?manifest=http%3A%2F%2Flocalhost%3A8000%2Fchannels%2Feyevinn%2Fmaster.m3u8)
 
-You might need to wait a few minutes first for the channel to be ready.
+You might need to wait a few minutes first for the channel to be ready. Documentation on how to manage schedules and channels are found in [this section](plugins/schedule_service.md).
 
 ## Installation
 
