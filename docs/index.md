@@ -53,6 +53,9 @@ The following environment variables can be set:
 
 - `PORT`: Which port to bind the service to.
 - `FAST_PLUGIN`: Which [plugin](plugins.md) to use.
+- `OPTS_USE_DEMUXED_AUDIO`: Use demuxed audio (default: true).
+- `OPTS_DEFAULT_SLATE_URI`: URI to default slate URL.
+- `OPTS_HEARTBEAT_URL`: Heartbeat url (default: `/`).
 
 ## Support
 
