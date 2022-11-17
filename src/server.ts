@@ -1,6 +1,16 @@
 import { ChannelEngine } from 'eyevinn-channel-engine';
 import { PluginFactory } from './plugin_factory';
 
+import FinalHandler from 'finalhandler';
+import ServeStatic from 'serve-static';
+import http from 'http';
+
+const serve = ServeStatic('./dist/ui');
+const server = http.createServer((req, res) => {
+  serve(req, res, FinalHandler(req, res));
+});
+server.listen(process.env.UI_PORT || 8001);
+
 function isTrue(s: string): boolean {
   const regex = /^\s*(true|1)\s*$/i;
   return regex.test(s);
