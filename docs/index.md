@@ -4,16 +4,30 @@ The Sustainable FAST Channel Engine
 
 ---
 
+![Screenshot multiview](images/ui-screenshot.png)
+
 Based on VOD2Live Technology and the [open source Eyevinn Channel Engine library](https://vod2live.docs.eyevinn.technology) you can generate a numerous amounts of FAST channels with a fraction of energy consumption compared to live transcoded FAST channels.
 
-![Screenshot](images/screenshot.png)
-
 ## Quick Start
+
+### Demo Installation
+
+Start an instance with 50 demo channels.
+
+```
+docker run -d -p 8000:8000 -p 8001:8001 \
+  -e DEMO_NUM_CHANNELS=50 \
+  eyevinntechnology/fast-engine
+```
+
+Open the URL [http://localhost:8001/](http://localhost:8001/) in your browser for a multiview of all 50 channels, and to playback one of the 50 channels point your HLS video player to the URL: `http://localhost:8000/channels/<N>/master.m3u8` where `<N>` is a number between 1 and 50.
+
+### Schedule Service and FAST Engine
 
 To spin up a Schedule Service and FAST Channel Engine.
 
 ```bash
-curl -SL https://github.com/Eyevinn/docker-fast/releases/download/v0.1.6/docker-compose.yml | docker-compose up
+curl -SL https://github.com/Eyevinn/docker-fast/releases/download/v0.2.0/docker-compose.yml | docker-compose up
 ```
 
 A demo channel called `eyevinn` is created by default. To get the schedule for a specific date `YYYY-MM-DD`.
@@ -23,6 +37,8 @@ curl -X 'GET' \
   'http://localhost:8080/api/v1/channels/eyevinn/schedule?date=YYYY-MM-DD' \
   -H 'accept: application/json'
 ```
+
+![Screenshot schedule](images/screenshot.png)
 
 And to play the channel direct your HLS video player to the URL [http://localhost:8000/channels/eyevinn/master.m3u8](http://web.player.eyevinn.technology/?manifest=http%3A%2F%2Flocalhost%3A8000%2Fchannels%2Feyevinn%2Fmaster.m3u8)
 
@@ -57,6 +73,17 @@ The following environment variables can be set:
 - `OPTS_USE_DEMUXED_AUDIO`: Use demuxed audio (default: true).
 - `OPTS_DEFAULT_SLATE_URI`: URI to default slate URL.
 - `OPTS_HEARTBEAT_URL`: Heartbeat url (default: `/`).
+
+### Multiview
+
+A multiview is available on port 8001 unless overriden by the environment variable `UI_PORT`. To enable it you need to expose the port 8001 when starting the container, e.g.
+
+```
+docker run -d -p 8000:8000 -p 8001:8001 \
+  -e FAST_PLUGIN=ScheduleService \
+  -e SCHEDULE_SERVICE_API_URL=<your-schedule-service-api-url> \
+  eyevinntechnology/fast-engine
+```
 
 ## Support
 
