@@ -74,6 +74,17 @@ The following environment variables can be set:
 - `OPTS_DEFAULT_SLATE_URI`: URI to default slate URL.
 - `OPTS_HEARTBEAT_URL`: Heartbeat url (default: `/`).
 
+### Multiview
+
+A multiview is available on port 8001 unless overriden by the environment variable `UI_PORT`. To enable it you need to expose the port 8001 when starting the container, e.g.
+
+```
+docker run -d -p 8000:8000 -p 8001:8001 \
+  -e FAST_PLUGIN=ScheduleService \
+  -e SCHEDULE_SERVICE_API_URL=<your-schedule-service-api-url> \
+  eyevinntechnology/fast-engine
+```
+
 ## Support
 
 Join our [community on Slack](http://slack.streamingtech.se) where you can post any questions regarding any of our open source projects. Eyevinn's consulting business can also offer you:
