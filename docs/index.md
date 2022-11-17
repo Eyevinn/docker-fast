@@ -52,6 +52,7 @@ docker run -d -p 8000:8000 \
 The following environment variables can be set:
 
 - `PORT`: Which port to bind the service to.
+- `UI_PORT`: Which port to bind the UI to.
 - `FAST_PLUGIN`: Which [plugin](plugins.md) to use.
 - `OPTS_USE_DEMUXED_AUDIO`: Use demuxed audio (default: true).
 - `OPTS_DEFAULT_SLATE_URI`: URI to default slate URL.

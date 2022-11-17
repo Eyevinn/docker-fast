@@ -5,5 +5,6 @@ WORKDIR /app
 
 RUN npm install
 RUN npm run build
+RUN npm run build:ui
 
 ENTRYPOINT [ "npm", "start" ]
