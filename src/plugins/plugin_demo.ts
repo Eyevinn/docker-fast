@@ -4,27 +4,43 @@ import { IAssetManager, IChannelManager,
 } from "eyevinn-channel-engine";
 import { BasePlugin, PluginInterface } from "./plugin_interface";
 
+const DEMO_NUM_CHANNELS = process.env.DEMO_NUM_CHANNELS ? parseInt(process.env.DEMO_NUM_CHANNELS, 10) : 12;
+const DEFAULT_ASSETS = [
+  "https://maitv-vod.lab.eyevinn.technology/VINN.mp4/master.m3u8",
+  "https://lab.cdn.eyevinn.technology/stswe19-industry-group-low-latency-hls.mp4/manifest.m3u8",
+  "https://lab.cdn.eyevinn.technology/stswe19-global-but-local-ott-platform.mp4/manifest.m3u8",
+  "https://lab.cdn.eyevinn.technology/stswe19-serverless-media-processing-at-netflix.mp4/manifest.m3u8",
+  "https://lab.cdn.eyevinn.technology/NO_TIME_TO_DIE_short_Trailer_2021.mp4/manifest.m3u8",
+  "https://lab.cdn.eyevinn.technology/THE_GRAND_BUDAPEST_HOTEL_Trailer_2014.mp4/manifest.m3u8",
+  "https://lab.cdn.eyevinn.technology/stswe19-three-roads-to-jerusalem.mp4/manifest.m3u8",
+  "https://lab.cdn.eyevinn.technology/wrc-jbi-arvija-finland-220126.mov/manifest.m3u8",
+  "https://lab.cdn.eyevinn.technology/stswe19-challenge-to-preserver-creators-intent.mp4/manifest.m3u8",
+  "https://lab.cdn.eyevinn.technology/BAAHUBALI_3_Trailer_2021.mp4/manifest.m3u8",
+  "https://lab.cdn.eyevinn.technology/stswe22-talks-teaser-Z4-ehLIMe8.mp4/manifest.m3u8",
+  "https://lab.cdn.eyevinn.technology/OWL_MVP_2021.mp4/manifest.m3u8",
+  "https://lab.cdn.eyevinn.technology/stswe22-webrtc-flt5fm7bR3.mp4/manifest.m3u8",
+  "https://lab.cdn.eyevinn.technology/wrc-jbi-sweden-220126-BP4uTVw_FV.mp4/manifest.m3u8",
+  "https://lab.cdn.eyevinn.technology/f1-monaco-5l-jan8-5ULu9E6C_t.mov/manifest.m3u8",
+  "https://maitv-vod.lab.eyevinn.technology/tearsofsteel_4k.mov/master.m3u8",
+]
+
 class AssetManager implements IAssetManager {
   private assets;
   private pos;
   constructor() {
-    this.assets = {
-      1: [
-        {
-          id: 1,
-          title: "Tears of Steel",
-          uri: "https://maitv-vod.lab.eyevinn.technology/tearsofsteel_4k.mov/master.m3u8",
-        },
-        {
-          id: 2,
-          title: "VINN",
-          uri: "https://maitv-vod.lab.eyevinn.technology/VINN.mp4/master.m3u8",
-        },
-      ],
-    };
-    this.pos = {
-      1: 1,
-    };
+    this.assets = {};
+    this.pos = {};
+    for (let i = 0; i < DEMO_NUM_CHANNELS; i++) {
+      this.assets[i+1] = [];
+      DEFAULT_ASSETS.forEach(asset => {
+        this.assets[i+1].push({
+          id: i + 1,
+          title: `Asset ${i + 1}`,
+          uri: asset,
+        });
+      });
+      this.pos[i+1] = Math.floor(Math.random() * DEFAULT_ASSETS.length);
+    }
   }
 
   async getNextVod(vodRequest: VodRequest): Promise<VodResponse> {
@@ -49,7 +65,13 @@ class AssetManager implements IAssetManager {
 
 class ChannelManager implements IChannelManager {
   getChannels(): Channel[] {
-    return [{ id: "1", profile: this._getProfile() }];
+    const channelList = [];
+    for (let i = 0; i < DEMO_NUM_CHANNELS; i++) {
+      channelList.push({
+        id: `${i + 1}`, profile: this._getProfile()
+      });
+    }
+    return channelList;
   }
 
   _getProfile(): ChannelProfile[] {
