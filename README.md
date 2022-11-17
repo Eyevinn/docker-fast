@@ -7,12 +7,14 @@
 
 The FAST Channel Engine is a sustainable FAST Channel Engine based on VOD2Live technology and the open source [Channel Engine library](https://vod2live.docs.eyevinn.technology) from Eyevinn Technology.
 
+![Screenshot multiview](docs/images/ui-screenshot.png)
+
 ## Quick Start
 
 To spin up a Schedule Service and FAST Channel Engine.
 
 ```bash
-curl -SL https://github.com/Eyevinn/docker-fast/releases/download/v0.1.6/docker-compose.yml | docker-compose up
+curl -SL https://github.com/Eyevinn/docker-fast/releases/download/v0.2.0/docker-compose.yml | docker-compose up
 ```
 
 A demo channel called `eyevinn` is created by default. To get the schedule for a specific date `YYYY-MM-DD`.

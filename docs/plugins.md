@@ -16,7 +16,7 @@ The following plugins are available.
 
 ## Demo Plugin Options
 
-No options available
+- `DEMO_NUM_CHANNELS`: Number of demo channels to create.
 
 ## Schedule Service Plugin Options
 
