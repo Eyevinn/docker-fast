@@ -13,7 +13,7 @@ Based on VOD2Live Technology and the [open source Eyevinn Channel Engine library
 To spin up a Schedule Service and FAST Channel Engine.
 
 ```bash
-curl -SL https://github.com/Eyevinn/docker-fast/releases/download/v0.1.4/docker-compose.yml | docker-compose up
+curl -SL https://github.com/Eyevinn/docker-fast/releases/download/v0.1.6/docker-compose.yml | docker-compose up
 ```
 
 A demo channel called `eyevinn` is created by default. To get the schedule for a specific date `YYYY-MM-DD`.
