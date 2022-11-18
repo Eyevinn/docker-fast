@@ -1,4 +1,5 @@
 dist/
+dist-website/
 node_modules/
 .git/
 .parcel-cache

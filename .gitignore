@@ -1,4 +1,5 @@
 node_modules/
 dist/
+dist-website/
 site/
 .parcel-cache/
