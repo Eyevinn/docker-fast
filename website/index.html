@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The Sustainable FAST Channel Engine</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <link rel="stylesheet" href="https://newcss.net/theme/night.css">
+    <style type="text/css">
+      header {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      header>*,
+      header>:last-child {
+        padding-top: 0;
+        margin-bottom: 1rem;
+      }
+      footer {
+        text-align: center;
+        font-size: 0.8em;
+      }
+      
+      div.center {
+        width: 90%;
+        margin: auto;
+      }
+
+      .center {
+        text-align: center;
+      }
+
+      video {
+        width: 100%;
+        margin: 10px;
+        border-radius: 10px;
+      }
+
+      b {
+        color: #45db7f;
+      }
+
+      a {
+        color: #45db7f;
+      }
+      a:hover {
+        color: green;
+      }
+
+      section#features {
+        margin-top: 40px;
+        margin-bottom: 40px;
+        background-color: #ddd;
+        color: black;
+        border-radius: 4px;
+        padding: 20px;
+      }
+      section#features h2 {
+        color: black;
+      }
+      section#features a {
+        color: black;
+      }
+      section#features a:hover {
+        color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>FAST Engine by Eyevinn</h1>
+    </header>
+    <section>
+      <div class="center">
+        <h3 class="center">The <b>Sustainable</b> FAST Channel Engine</h3>
+        <video src="screengrab.mp4" muted autoplay loop></video>
+      </div>
+    </section>
+    <section>
+      <p>Create unlimited number of FAST channels to a fraction of energy consumption compared to live transcoded FAST channels.</p>
+      <p>Running 100 FAST channels from a tiny instance? No problem. Try it out yourself:</p>
+      <code>
+        docker run -d -p 8000:8000 -e DEMO_NUM_CHANNELS=100 eyevinntechnology/fast-engine
+      </code>
+    </section>
+    <section id="features">
+      <p>Based on VOD2Live technology and the open source <a href="https://vod2live.docs.eyevinn.technology">Channel Engine library</a></p>
+      <ul>
+        <li>Mix VOD and LIVE sources.</li>
+        <li>Passthrough of ad opportunity markers and proven integration with Server Side Ad Insertion providers.</li>
+        <li>Proven integration with origin repackagers to enable support for both HLS and MPEG-DASH.</li>
+        <li>Community provided plugins for integration with scheduling services.</li>
+      </ul>
+    </section>
+    <section class="center">
+      <button onclick="gotodocs()">Get started</button>
+    </section>
+    <footer>
+      <p>By <a target="_blank" href="https://www.eyevinn.se">Eyevinn Technology AB</a> and it is <a target="_blank" href="https://github.com/Eyevinn/docker-fast">open source</a></p>
+    </footer>
+    <script>
+      function gotodocs() {
+        window.open("https://fast.docs.eyevinn.technology");
+      }
+    </script>
+  </body>
+</html>

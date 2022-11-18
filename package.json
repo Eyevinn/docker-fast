@@ -6,9 +6,11 @@
   "scripts": {
     "build": "tsc --project ./",
     "build:ui": "parcel build src/ui/index.html",
+    "build:lp": "parcel build --target website",
     "postversion": "git push && git push --tags",
     "dev": "NODE_ENV=development tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node --inspect ./dist/server.js\"",
     "dev:ui": "parcel -p 1234 --no-cache src/ui/index.html",
+    "dev:lp": "parcel -p 1234 --target website --no-cache",
     "server": "node ./dist/server.js",
     "start": "npm run server",
     "test": "jest",
@@ -19,6 +21,11 @@
     "default": {
       "distDir": "./dist/ui",
       "publicUrl": "/"
+    },
+    "website": {
+      "distDir": "./dist-website",
+      "publicUrl": "/",
+      "source": "website/index.html"
     }
   },
   "author": "Eyevinn Technology <work@eyevinn.se>",
