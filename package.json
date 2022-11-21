@@ -7,14 +7,15 @@
     "build": "tsc --project ./",
     "build:ui": "parcel build src/ui/index.html",
     "build:lp": "parcel build --target website",
+    "build:docs": "mkdocs build",
     "postversion": "git push && git push --tags",
     "dev": "NODE_ENV=development tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node --inspect ./dist/server.js\"",
     "dev:ui": "parcel -p 1234 --no-cache src/ui/index.html",
     "dev:lp": "parcel -p 1234 --target website --no-cache",
+    "dev:docs": "mkdocs serve -a 127.0.0.1:2345",
     "server": "node ./dist/server.js",
     "start": "npm run server",
-    "test": "jest",
-    "dev:docs": "mkdocs serve"
+    "test": "jest"
   },
   "targets": {
     "main": false,
