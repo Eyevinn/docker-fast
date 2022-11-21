@@ -18,6 +18,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
     <link rel="stylesheet" href="https://newcss.net/theme/night.css">
     <style type="text/css">
+      :root {
+        --nc-lk-1: #45db7f;
+        --nc-lk-2: green;
+      }
       header {
         display: flex;
         justify-content: space-evenly;
@@ -50,14 +54,7 @@
       }
 
       b {
-        color: #45db7f;
-      }
-
-      a {
-        color: #45db7f;
-      }
-      a:hover {
-        color: green;
+        color: var(--nc-lk-1);
       }
 
       section#features {
@@ -106,15 +103,12 @@
       </ul>
     </section>
     <section class="center">
-      <button onclick="gotodocs()">Get started</button>
+      <a href="https://fast.docs.eyevinn.technology">
+        <button>Get started</button>
+      </a>
     </section>
     <footer>
       <p>By <a target="_blank" href="https://www.eyevinn.se">Eyevinn Technology AB</a> and it is <a target="_blank" href="https://github.com/Eyevinn/docker-fast">open source</a></p>
     </footer>
-    <script>
-      function gotodocs() {
-        window.open("https://fast.docs.eyevinn.technology");
-      }
-    </script>
   </body>
 </html>
