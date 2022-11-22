@@ -27,7 +27,7 @@ Open the URL [http://localhost:8001/](http://localhost:8001/) in your browser fo
 To spin up a Schedule Service and FAST Channel Engine.
 
 ```bash
-curl -SL https://github.com/Eyevinn/docker-fast/releases/download/v0.2.0/docker-compose.yml | docker-compose up
+curl -SL https://github.com/Eyevinn/docker-fast/releases/download/v0.2.0/docker-compose.yml | docker-compose -f - up
 ```
 
 A demo channel called `eyevinn` is created by default. To get the schedule for a specific date `YYYY-MM-DD`.
