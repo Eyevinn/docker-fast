@@ -4,7 +4,7 @@ Enable the ScheduleService plugin to provide the FAST engine with channels and s
 
 # Creating a channel and automatically generate schedule
 
-Follow these steps to create a new channel where the schedule is automatically populated from a simplified MRSS feed. We will be using `<SCHEDULE_API_URL>` throughout this guide and you will need to replace that with the actual API url to the Schedule Service. If you used the Quick Start docker-compose file the URL is `http://localhost:8080/api/v1`. And the `<SCHEDULE_HOST>` would be `localhost:8080`.
+Follow these steps to create a new channel where the schedule is automatically populated from a simplified MRSS feed. We will be using `<SCHEDULE_API_URL>` throughout this guide and you will need to replace that with the actual API url to the Schedule Service. If you used the Quick Start docker-compose file the URL is `http://localhost:8080/api/v1`. And the `<SCHEDULE_HOST>` would be `localhost:8080`. For instructions on how to install a Schedule Service visit the [schedule service installation instructions](../schedule_service.md).
 
 We will be using the command line tool `curl` for the HTTP requests but other HTTP API tools, for example Postman, can be used.
 

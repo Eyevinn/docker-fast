@@ -30,6 +30,13 @@ To spin up a Schedule Service and FAST Channel Engine.
 curl -SL https://github.com/Eyevinn/docker-fast/releases/download/v0.2.0/docker-compose.yml | docker-compose -f - up
 ```
 
+Running this command above it will spin up three Docker containers:
+- A local Dynamo DB instance that the Schedule Service uses.
+- A Schedule Service instance.
+- A Channel Engine instance.
+
+For demo and POC you can use a local Dynamo DB instance but it is recommended to use an AWS Dynamo DB resource.
+
 A demo channel called `eyevinn` is created by default. To get the schedule for a specific date `YYYY-MM-DD`.
 
 ```bash

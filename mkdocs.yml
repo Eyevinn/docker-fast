@@ -10,6 +10,7 @@ nav:
   - Origin Services:
     - Overview: origins.md
     - AWS MediaPackage: origin/aws_mediapackage.md
+  - Schedule Service: schedule_service.md
 theme:
   name: material
   
