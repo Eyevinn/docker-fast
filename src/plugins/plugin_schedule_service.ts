@@ -43,7 +43,7 @@ class AdapterStreamSwitchManager implements IStreamSwitchManager {
 export class ScheduleServicePlugin extends BasePlugin implements PluginInterface  {
   private adapterChannelManager: Adapter.ChannelManager;
 
-  constructor() {
+  constructor() {
     super('ScheduleService');
     const endpointUrl = 
       new URL(process.env.SCHEDULE_SERVICE_API_URL || 'https://schedule.vc.eyevinn.technology/api/v1');
