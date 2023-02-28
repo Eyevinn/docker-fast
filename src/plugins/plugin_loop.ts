@@ -42,7 +42,7 @@ class LoopChannelManager implements IChannelManager {
 
   _getProfile(): ChannelProfile[] {
     return [
-      { bw: 8134000, codecs: "avc1.4d001f,mp4a.40.2", resolution: [1920, 1280] },
+      { bw: 8134000, codecs: "avc1.4d001f,mp4a.40.2", resolution: [1920, 1080] },
       { bw: 6134000, codecs: "avc1.4d001f,mp4a.40.2", resolution: [1280, 720] },
       { bw: 4134000, codecs: "avc1.4d001f,mp4a.40.2", resolution: [1024, 458] },
       { bw: 2323000, codecs: "avc1.4d001f,mp4a.40.2", resolution: [640, 286] },
