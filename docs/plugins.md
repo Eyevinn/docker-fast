@@ -14,6 +14,7 @@ The following plugins are available.
 | Demo   | Random selection from a pre-defined static list of assets |
 | ScheduleService | Fetches schedule and channels from an [Eyevinn Schedule Service](https://github.com/Eyevinn/schedule-service) |
 | Loop | Produce a channel with a single VOD on loop |
+| Playlist | Produce a channel based on a playlist txt file |
 
 ## Demo Plugin Options
 
@@ -29,3 +30,8 @@ The following plugins are available.
 - `LOOP_CHANNEL_NAME`: The name of the channel (default `loop`)
 
 Channel with the HLS VOD to loop is then available at `/channels/loop/master.m3u8`
+
+## Playlist Plugin Options
+
+- `PLAYLIST_URL`: URL to the playlist txt file. A txt file where each line contains a URL to a HLS VOD ([example](https://testcontent.eyevinn.technology/fast/fast-playlist.txt))
+- `PLAYLIST_CHANNEL_NAME`: The name of the channel (default `playlist`)
