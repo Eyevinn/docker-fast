@@ -22,6 +22,19 @@ docker run -d -p 8000:8000 -p 8001:8001 \
 
 Open the URL [http://localhost:8001/](http://localhost:8001/) in your browser for a multiview of all 50 channels, and to playback one of the 50 channels point your HLS video player to the URL: `http://localhost:8000/channels/<N>/master.m3u8` where `<N>` is a number between 1 and 50.
 
+### Channel from a Playlist TXT File
+
+To produce a channel based on a txt file with a list of VOD URLs:
+
+```bash
+docker run -d -p 8000:8000 \
+  -e FAST_PLUGIN=Playlist \
+  -e PLAYLIST_URL=https://testcontent.eyevinn.technology/fast/fast-playlist.txt \
+  eyevinntechnology/fast-engine
+```
+
+A channel based on this playlist is then available at `http://localhost:8000/channels/playlist/master.m3u8`.
+
 ### Schedule Service and FAST Engine
 
 To spin up a Schedule Service and FAST Channel Engine.
