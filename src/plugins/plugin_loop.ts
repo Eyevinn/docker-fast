@@ -24,19 +24,25 @@ class LoopAssetManager implements IAssetManager {
 
 class LoopChannelManager implements IChannelManager {
   private channelId: string;
+  private useDemuxedAudio: boolean;
 
-  constructor(channelId: string) {
+  constructor(channelId: string, useDemuxedAudio: boolean) {
     this.channelId = channelId;
+    this.useDemuxedAudio = useDemuxedAudio;
     console.log(`Loop channel available at /channels/${this.channelId}/master.m3u8`);
   }
 
   getChannels(): Channel[] {
-    const channelList = [
-      {
-        id: this.channelId,
-        profile: this._getProfile()
-      }
-    ];
+    let channel: Channel = {
+      id: this.channelId,
+      profile: this._getProfile()
+    };
+    if (this.useDemuxedAudio) {
+      channel.audioTracks = [
+        { language: "en", name: "English", default: true }
+      ]
+    }
+    const channelList = [ channel ];
     return channelList;
   }
 
@@ -62,8 +68,8 @@ export class LoopPlugin extends BasePlugin implements PluginInterface  {
     return new LoopAssetManager(vodToLoop);
   }
 
-  newChannelManager(): IChannelManager {
-    return new LoopChannelManager(process.env.LOOP_CHANNEL_NAME ? process.env.LOOP_CHANNEL_NAME : "loop");
+  newChannelManager(useDemuxedAudio: boolean): IChannelManager {
+    return new LoopChannelManager(process.env.LOOP_CHANNEL_NAME ? process.env.LOOP_CHANNEL_NAME : "loop", useDemuxedAudio);
   }
 
   newStreamSwitchManager(): IStreamSwitchManager {

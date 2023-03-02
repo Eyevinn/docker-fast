@@ -57,19 +57,25 @@ class PlaylistAssetManager implements IAssetManager {
 
 class PlaylistChannelManager implements IChannelManager {
   private channelId: string;
+  private useDemuxedAudio: boolean;
 
-  constructor(channelId: string) {
+  constructor(channelId: string, useDemuxedAudio: boolean) {
     this.channelId = channelId;
+    this.useDemuxedAudio = useDemuxedAudio;
     console.log(`Playlist channel available at /channels/${this.channelId}/master.m3u8`);
   }
 
   getChannels(): Channel[] {
-    const channelList = [
-      {
-        id: this.channelId,
-        profile: this._getProfile()
-      }
-    ];
+    let channel: Channel = {
+      id: this.channelId,
+      profile: this._getProfile()
+    };
+    if (this.useDemuxedAudio) {
+      channel.audioTracks = [
+        { language: "en", name: "English", default: true }
+      ]
+    }
+    const channelList = [ channel ];
     return channelList;
   }
 
@@ -95,8 +101,8 @@ export class PlaylistPlugin extends BasePlugin implements PluginInterface  {
     return new PlaylistAssetManager(playlistUrl);
   }
 
-  newChannelManager(): IChannelManager {
-    return new PlaylistChannelManager(process.env.PLAYLIST_CHANNEL_NAME ? process.env.PLAYLIST_CHANNEL_NAME : "playlist");
+  newChannelManager(useDemuxedAudio: boolean): IChannelManager {
+    return new PlaylistChannelManager(process.env.PLAYLIST_CHANNEL_NAME ? process.env.PLAYLIST_CHANNEL_NAME : "playlist", useDemuxedAudio);
   }
 
   newStreamSwitchManager(): IStreamSwitchManager {
