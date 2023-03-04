@@ -22,6 +22,7 @@ services:
       - schedule-service
     image: eyevinntechnology/fast-engine
     environment:
+      - OPTS_USE_DEMUXED_AUDIO=false
       - FAST_PLUGIN=ScheduleService
       - SCHEDULE_SERVICE_API_URL=http://schedule-service:8080/api/v1
       - DEBUG=schedule-service-*

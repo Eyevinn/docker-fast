@@ -40,7 +40,7 @@ A channel based on this playlist is then available at `http://localhost:8000/cha
 To spin up a Schedule Service and FAST Channel Engine.
 
 ```bash
-curl -SL https://github.com/Eyevinn/docker-fast/releases/download/v0.2.0/docker-compose.yml | docker-compose -f - up
+curl -SL https://github.com/Eyevinn/docker-fast/releases/download/v1.1.1/docker-compose.yml | docker-compose -f - up
 ```
 
 Running this command above it will spin up three Docker containers:
