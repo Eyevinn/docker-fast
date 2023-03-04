@@ -31,6 +31,7 @@ const engine = new ChannelEngine(plugin.newAssetManager(), {
   heartbeat,
   defaultSlateUri,
   useDemuxedAudio,
+  alwaysNewSegments: true,
   channelManager: plugin.newChannelManager(useDemuxedAudio),
   streamSwitchManager: plugin.newStreamSwitchManager(),
 });
