@@ -56,7 +56,8 @@ export class ScheduleServicePlugin extends BasePlugin implements PluginInterface
     return new AdapterAssetManager(this.adapterChannelManager);
   }
 
-  newChannelManager(): IChannelManager {
+  newChannelManager(useDemuxedAudio: boolean): IChannelManager {
+    this.adapterChannelManager.setUseDemuxedAudio(useDemuxedAudio);
     return this.adapterChannelManager;
   }
 
