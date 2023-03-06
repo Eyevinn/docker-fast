@@ -4,7 +4,7 @@ services:
   schedule-service:
     depends_on:
       - ddb
-    image: eyevinntechnology/schedule-service:v0.4.0
+    image: eyevinntechnology/schedule-service:v0.5.0
     environment:
       - PORT=8080
       - IF=0.0.0.0
