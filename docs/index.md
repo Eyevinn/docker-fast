@@ -93,6 +93,7 @@ The following environment variables can be set:
 - `OPTS_USE_DEMUXED_AUDIO`: Use demuxed audio (default: true).
 - `OPTS_DEFAULT_SLATE_URI`: URI to default slate URL.
 - `OPTS_HEARTBEAT_URL`: Heartbeat url (default: `/`).
+- `OPTS_STREAM_ORDER`: Stream order as comma separated list of heights (default: `"458,1080,720,286,214"`)
 
 ### Multiview
 
