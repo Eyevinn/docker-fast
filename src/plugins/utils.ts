@@ -44,7 +44,6 @@ export function getDefaultChannelVideoProfile() {
       }
     }
     streams = newStreams;
-    console.log(streams);
   }
   return streams;
 }
