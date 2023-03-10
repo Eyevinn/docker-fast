@@ -2,7 +2,7 @@ import { IAssetManager, IChannelManager,
   VodRequest, VodResponse, 
   Channel, ChannelProfile, IStreamSwitchManager 
 } from "eyevinn-channel-engine";
-import { BasePlugin, PluginInterface } from "./plugin_interface";
+import { BasePlugin, PluginInterface } from "./interface";
 
 const DEMO_NUM_CHANNELS = process.env.DEMO_NUM_CHANNELS ? parseInt(process.env.DEMO_NUM_CHANNELS, 10) : 12;
 const DEFAULT_ASSETS = [
