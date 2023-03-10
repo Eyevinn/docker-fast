@@ -1,5 +1,5 @@
-import { BasePlugin, PluginInterface } from "./plugin_interface";
-import { IAssetManager, IChannelManager, IStreamSwitchManager, Schedule, VodRequest, VodResponse } from "eyevinn-channel-engine";
+import { BasePlugin, PluginInterface } from "./interface";
+import { IAssetManager, IChannelManager, IStreamSwitchManager, Schedule, VodRequest, VodResponse } from "eyevinn-channel-engine";
 import * as Adapter from '@eyevinn/schedule-service-adapter';
 
 class AdapterAssetManager implements IAssetManager {

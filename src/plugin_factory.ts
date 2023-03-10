@@ -1,5 +1,5 @@
 import { DemoPlugin } from "./plugins/plugin_demo";
-import { PluginInterface } from "./plugins/plugin_interface";
+import { PluginInterface } from "./plugins/interface";
 import { ScheduleServicePlugin } from "./plugins/plugin_schedule_service";
 import { LoopPlugin } from "./plugins/plugin_loop";
 import { PlaylistPlugin } from "./plugins/plugin_playlist";
