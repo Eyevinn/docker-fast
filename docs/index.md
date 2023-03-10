@@ -94,6 +94,7 @@ The following environment variables can be set:
 - `OPTS_DEFAULT_SLATE_URI`: URI to default slate URL.
 - `OPTS_HEARTBEAT_URL`: Heartbeat url (default: `/`).
 - `OPTS_STREAM_ORDER`: Stream order as comma separated list of heights (default: `"458,1080,720,286,214"`)
+- `OPTS_VIDEO_STREAMS`: Override video profile using a comma separated list of resolution and bandwidth tupels. For example: `-e OPTS_VIDEO_STREAMS="416x234:324586,640x360:471661"`
 
 ### Multiview
 
