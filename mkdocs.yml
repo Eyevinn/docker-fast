@@ -11,9 +11,10 @@ nav:
     - Overview: origins.md
     - AWS MediaPackage: origin/aws_mediapackage.md
   - Schedule Service: schedule_service.md
+  - Release notes: changelog.md
 theme:
   name: material
   
 use_directory_urls: false
 
-copyright: Copyright &copy; 2022 <a href="https://www.eyevinn.se">Eyevinn Technology AB</a>
+copyright: Copyright &copy; 2022- <a href="https://www.eyevinn.se">Eyevinn Technology AB</a>
