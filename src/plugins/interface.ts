@@ -17,3 +17,9 @@ export class BasePlugin {
     return this.pluginName;
   }
 }
+
+export interface Language {
+  language: string;
+  name: string;
+  default: boolean;
+}

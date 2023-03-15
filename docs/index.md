@@ -95,6 +95,23 @@ The following environment variables can be set:
 - `OPTS_HEARTBEAT_URL`: Heartbeat url (default: `/`).
 - `OPTS_STREAM_ORDER`: Stream order as comma separated list of heights (default: `"458,1080,720,286,214"`)
 - `OPTS_VIDEO_STREAMS`: Override video profile using a comma separated list of resolution and bandwidth tupels. For example: `-e OPTS_VIDEO_STREAMS="416x234:324586,640x360:471661"`
+- `OPTS_LANG_LIST`: Comma separated list of languages, e.g. (`"en,ja"`). First one is defined to be default
+- `OPTS_CHANNEL_PRESET`: Channel profile based on presets:
+  - `DD`: Sterao (2) and Dolby Digital (6)
+  - `ATMOS`: Stereo (2) and Dolby Atmos track (16) 
+
+### Advanced Audio
+
+Example of Sol Levante in Dolby Atmos audio:
+
+```
+docker run -p 8000:8000 \
+  -e FAST_PLUGIN=Loop \
+  -e LOOP_VOD_URL=https://testcontent.eyevinn.technology/dolby/index.m3u8 \
+  -e OPTS_CHANNEL_PRESET=ATMOS \
+  -e OPTS_LANG_LIST=ja,en \
+  eyevinntechnology/fast-engine
+```
 
 ### Multiview
 
