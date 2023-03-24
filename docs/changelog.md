@@ -1,5 +1,17 @@
 # Release Notes
 
+## Version 1.3.0
+
+New Features:
+
+* Support for channel presets and advanced audio codecs
+* Container options to set channel preset and language list: `OPTS_CHANNEL_PRESET`, `OPTS_LANG_LIST`
+
+Channel Engine v4.0.8 including the following bugfixes:
+
+* Support for multi audio codec channels
+* Correct audio group was not always chosen
+
 ## Version 1.2.0
 
 New Features:
