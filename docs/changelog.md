@@ -12,6 +12,13 @@ Channel Engine v4.0.8 including the following bugfixes:
 * Support for multi audio codec channels
 * Correct audio group was not always chosen
 
+### Version 1.3.1
+
+Channel Engine v4.0.12 including the following bugfixes:
+
+* HA-mode fixes and upgraded redis-client to support Redis engine v6. Redis v7 is not yet supported
+* Invalid audio group could be referenced by a stream
+
 ## Version 1.2.0
 
 New Features:
