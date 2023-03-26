@@ -35,3 +35,5 @@ Channel with the HLS VOD to loop is then available at `/channels/loop/master.m3u
 
 - `PLAYLIST_URL`: URL to the playlist txt file. A txt file where each line contains a URL to a HLS VOD ([example](https://testcontent.eyevinn.technology/fast/fast-playlist.txt))
 - `PLAYLIST_CHANNEL_NAME`: The name of the channel (default `playlist`)
+
+To provide a set of playlists the `PLAYLIST_URL` is a comma separated list of channel name and playlist url pairs delimited by a pipe char (`|`): `PLAYLIST_URL="<CHANNEL_NAME1>|<URL1>,<CHANNEL_NAME2>|<URL2>"`. In this case the `PLAYLIST_CHANNEL_NAME` is overriden if set.
