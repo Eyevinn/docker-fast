@@ -7,15 +7,57 @@ import fetch from "node-fetch";
 import { BasePlugin, PluginInterface } from "./interface";
 import { getDefaultChannelAudioProfile, getDefaultChannelVideoProfile } from "./utils";
 
-class PlaylistAssetManager implements IAssetManager {
-  private playlistUrl: URL;
-  private playlist: URL[];
-  private playlistPosition: number;
+interface PlaylistUrl {
+  id: string;
+  url: URL;
+}
 
-  constructor(playlistUrl: URL) {
-    this.playlistUrl = playlistUrl;
-    this.playlist = undefined;
-    this.playlistPosition = -1;
+interface Playlist {
+  id: string;
+  url: URL;
+  hlsUrls?: URL[];
+  position: number;
+}
+
+function parsePlaylistUrlParam(playlistUrlParam: string): PlaylistUrl[] {
+  const playlistUrls = [];
+  
+  if (playlistUrlParam.match(/^\S+\|\S+$/)) {
+    const tupels = playlistUrlParam.split(",").map(t => t.trim());
+    tupels.forEach(tupel => {
+      const [ channelName, playlistUrl ] = tupel.split("|");
+      if (channelName && playlistUrl) {
+        playlistUrls.push({
+          id: channelName,
+          url: playlistUrl
+        });
+      }
+    });
+  } else {
+    playlistUrls.push({
+      id: process.env.PLAYLIST_CHANNEL_NAME ? process.env.PLAYLIST_CHANNEL_NAME : 'playlist',
+      url: playlistUrlParam
+    });
+  }
+  return playlistUrls;
+}
+
+class PlaylistAssetManager implements IAssetManager {
+  private playlistUrls: PlaylistUrl[];
+  private playlists: Map<string, Playlist>;
+
+  constructor(playlistUrls: PlaylistUrl[]) {
+    this.playlistUrls = playlistUrls;
+    this.playlists = new Map<string, Playlist>();
+    this.playlistUrls.forEach(playlistUrl => {
+      const playlist: Playlist = {
+        id: playlistUrl.id,
+        url: playlistUrl.url,
+        hlsUrls: undefined,
+        position: -1
+      };
+      this.playlists.set(playlist.id, playlist);
+    });
   }
 
   async getNextVod(vodRequest: VodRequest): Promise<VodResponse> {
@@ -25,18 +67,19 @@ class PlaylistAssetManager implements IAssetManager {
       uri: "https://lab.cdn.eyevinn.technology/sto-slate.mp4/manifest.m3u"
     };
     try {
-      if (!this.playlist) {
-        await this._updatePlaylist();
+      const playlist = this.playlists.get(vodRequest.playlistId);
+      if (playlist && !playlist.hlsUrls) {
+        await this._updatePlaylist(vodRequest.playlistId);
       }
-      if (this.playlistPosition !== -1) {
+      if (playlist.position !== -1) {
         vodResponse = {
-          id: `${this.playlistPosition}`,
-          title: `Item ${this.playlistPosition}`,
-          uri: this.playlist[this.playlistPosition].toString(),
+          id: `${playlist.position}`,
+          title: `Item ${playlist.position}`,
+          uri: playlist.hlsUrls[playlist.position].toString(),
         };
-        this.playlistPosition++;
-        if (this.playlistPosition > this.playlist.length - 1) {
-          this.playlistPosition = 0;
+        playlist.position++;
+        if (playlist.position > playlist.hlsUrls.length - 1) {
+          playlist.position = 0;
         }
       }
     } catch (e) {
@@ -45,36 +88,42 @@ class PlaylistAssetManager implements IAssetManager {
     return vodResponse;
   }
 
-  private async _updatePlaylist() {
-    console.log("Fetching playlist from " + this.playlistUrl);
-    const response = await fetch(this.playlistUrl.toString());
+  private async _updatePlaylist(playlistId: string) {
+    const playlist = this.playlists.get(playlistId);
+    console.log("Fetching playlist from " + playlist.url);
+    const response = await fetch(playlist.url.toString());
     if (response.ok) {
       const body = await response.text();
-      this.playlist = body.split(/\r?\n/).filter(l => l !== '').map(l => new URL(l.trim()));
-      this.playlistPosition = 0;
+      playlist.hlsUrls = body.split(/\r?\n/).filter(l => l !== '').map(l => new URL(l.trim()));
+      playlist.position = 0;
     }
   }
 }
 
 class PlaylistChannelManager implements IChannelManager {
-  private channelId: string;
+  private channelIds: string[];
   private useDemuxedAudio: boolean;
 
-  constructor(channelId: string, useDemuxedAudio: boolean) {
-    this.channelId = channelId;
+  constructor(channelIds: string[], useDemuxedAudio: boolean) {
+    this.channelIds = channelIds;
     this.useDemuxedAudio = useDemuxedAudio;
-    console.log(`Playlist channel available at /channels/${this.channelId}/master.m3u8`);
+    this.channelIds.forEach(id => {
+      console.log(`Playlist channel available at /channels/${id}/master.m3u8`);
+    });
   }
 
   getChannels(): Channel[] {
-    let channel: Channel = {
-      id: this.channelId,
-      profile: this._getProfile()
-    };
-    if (this.useDemuxedAudio) {
-      channel.audioTracks = getDefaultChannelAudioProfile();
-    }
-    const channelList = [ channel ];
+    const channelList = [];
+    this.channelIds.forEach(channelId => {
+      let channel: Channel = {
+        id: channelId,
+        profile: this._getProfile()
+      };
+      if (this.useDemuxedAudio) {
+        channel.audioTracks = getDefaultChannelAudioProfile();
+      }
+      channelList.push(channel);
+    });
     return channelList;
   }
 
@@ -89,13 +138,21 @@ export class PlaylistPlugin extends BasePlugin implements PluginInterface  {
   }
   
   newAssetManager(): IAssetManager {
-    const playlistUrl = process.env.PLAYLIST_URL ? new URL(process.env.PLAYLIST_URL) 
-      : new URL("https://testcontent.eyevinn.technology/fast/fast-playlist.txt");
-    return new PlaylistAssetManager(playlistUrl);
+    const param = process.env.PLAYLIST_URL ? 
+      process.env.PLAYLIST_URL 
+      : "https://testcontent.eyevinn.technology/fast/fast-playlist.txt";
+
+    return new PlaylistAssetManager(parsePlaylistUrlParam(param));
   }
 
   newChannelManager(useDemuxedAudio: boolean): IChannelManager {
-    return new PlaylistChannelManager(process.env.PLAYLIST_CHANNEL_NAME ? process.env.PLAYLIST_CHANNEL_NAME : "playlist", useDemuxedAudio);
+    const param = process.env.PLAYLIST_URL ? 
+      process.env.PLAYLIST_URL 
+      : "https://testcontent.eyevinn.technology/fast/fast-playlist.txt";
+
+    const channels = parsePlaylistUrlParam(param).map(p => p.id);
+
+    return new PlaylistChannelManager(channels, useDemuxedAudio);
   }
 
   newStreamSwitchManager(): IStreamSwitchManager {
