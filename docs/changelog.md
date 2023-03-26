@@ -32,7 +32,7 @@ New Features:
 * Container option to override default video profile
 * Container option to configure the order of the video streams
 
-Channel Enginve v4.0.6 including the following bugfixes:
+Channel Engine v4.0.6 including the following bugfixes:
 
 * Cache directive for index / master manifest
 * Additional HA-mode fixes
