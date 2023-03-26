@@ -1,5 +1,11 @@
 # Release Notes
 
+## Version 1.4.0
+
+New Features:
+
+* Playlist plugin can handle a list of playlists
+
 ## Version 1.3.0
 
 New Features:
