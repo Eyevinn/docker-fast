@@ -1,0 +1,5 @@
+dist/
+dist-website/
+site/
+*.yml
+README.md

@@ -14,7 +14,7 @@ To connect these two origin services we will use the HLS Pull Push service. Anot
 ```javascript
 const pullPushService = new HLSPullPush();
 const outputPlugin = new MediaPackageOutput();
-pullPushService.registerPlugin("mediapackage", outputPlugin);
+pullPushService.registerPlugin('mediapackage', outputPlugin);
 pullPushService.listen(process.env.PORT || 8080);
 ```
 
@@ -37,6 +37,7 @@ const sessionId = pullPushService.startFetcher({
 });
 outputDest.attachSessionId(sessionId);
 ```
+
 The above snippet will pull HLS from the VOD2Live channel `https://<my-fast-channel-engine>/channels/1/master.m3u8` and push to an AWS MediaPackage channel. Ingest URL and credentials are available in the AWS MediaPackage console.
 
 ![AWS MediaPackage inputs](../images/aws_mediapackage_config_1.png)
@@ -45,7 +46,7 @@ Now once you have HLS pushing to AWS MediaPackage you can configure different ou
 
 ![AWS MediaPackage ouputs](../images/aws_mediapackage_config_2.png)
 
-You can also configure the output to include an I-frame only stream that is useful when trick playing or scrubbing. 
+You can also configure the output to include an I-frame only stream that is useful when trick playing or scrubbing.
 
 ![AWS MediaPackage settings](../images/aws_mediapackage_config_3.png)
 

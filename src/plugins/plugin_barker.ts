@@ -1,12 +1,22 @@
-import { IAssetManager, IChannelManager, 
-  VodRequest, VodResponse, 
-  Channel, ChannelProfile, IStreamSwitchManager, Schedule 
-} from "eyevinn-channel-engine";
-import { ScheduleStreamType } from "eyevinn-channel-engine/dist/engine/server";
-import fetch from "node-fetch";
-import { BasePlugin, PluginInterface } from "./interface";
+import {
+  IAssetManager,
+  IChannelManager,
+  VodRequest,
+  VodResponse,
+  Channel,
+  ChannelProfile,
+  IStreamSwitchManager,
+  Schedule
+} from 'eyevinn-channel-engine';
+import { ScheduleStreamType } from 'eyevinn-channel-engine/dist/engine/server';
+import fetch from 'node-fetch';
+import { BasePlugin, PluginInterface } from './interface';
 
-import { generateId, getDefaultChannelAudioProfile, getDefaultChannelVideoProfile } from "./utils";
+import {
+  generateId,
+  getDefaultChannelAudioProfile,
+  getDefaultChannelVideoProfile
+} from './utils';
 
 class BarkerAssetManager implements IAssetManager {
   private fallbackVodToLoop: URL;
@@ -15,11 +25,12 @@ class BarkerAssetManager implements IAssetManager {
     this.fallbackVodToLoop = fallbackVodToLoop;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getNextVod(vodRequest: VodRequest): Promise<VodResponse> {
     const vodResponse = {
-      id: "loop",
-      title: "VOD on Loop",
-      uri: this.fallbackVodToLoop.toString(),
+      id: 'loop',
+      title: 'VOD on Loop',
+      uri: this.fallbackVodToLoop.toString()
     };
     return vodResponse;
   }
@@ -29,33 +40,35 @@ class BarkerChannelManager implements IChannelManager {
   private channelId: string;
   private useDemuxedAudio: boolean;
 
-  constructor(channelId: string, useDemuxedAudio: boolean = false) {
+  constructor(channelId: string, useDemuxedAudio = false) {
     this.channelId = channelId;
     this.useDemuxedAudio = useDemuxedAudio;
-    console.log(`Barker channel available at /channels/${this.channelId}/master.m3u8`);
+    console.log(
+      `Barker channel available at /channels/${this.channelId}/master.m3u8`
+    );
   }
 
   getChannels(): Channel[] {
-    let channel: Channel = {
+    const channel: Channel = {
       id: this.channelId,
       profile: this._getProfile()
     };
     if (this.useDemuxedAudio) {
-      channel.audioTracks = getDefaultChannelAudioProfile()
+      channel.audioTracks = getDefaultChannelAudioProfile();
     }
-    const channelList = [ channel ];
+    const channelList = [channel];
     return channelList;
   }
 
   _getProfile(): ChannelProfile[] {
     return getDefaultChannelVideoProfile();
-  }  
+  }
 }
 
 class BarkerStreamSwitchManager implements IStreamSwitchManager {
   private schedule: Schedule[] = [];
   private liveStreams: URL[] = [];
-  private startOffset: number = -1;
+  private startOffset = -1;
   private liveStreamListUrl: URL;
   private switchIntervalMs: number = 60 * 1000;
 
@@ -64,14 +77,20 @@ class BarkerStreamSwitchManager implements IStreamSwitchManager {
     this.switchIntervalMs = switchIntervalMs;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getSchedule(channelId: string): Promise<Schedule[]> {
     if (this.liveStreams.length === 0) {
-      console.log("Fetching live stream list from " + this.liveStreamListUrl.toString());
+      console.log(
+        'Fetching live stream list from ' + this.liveStreamListUrl.toString()
+      );
       const response = await fetch(this.liveStreamListUrl.toString());
       if (response.ok) {
         const body = await response.text();
-        this.liveStreams = body.split(/\r?\n/).filter(l => l !== '').map(l => new URL(l.trim()));
-      }  
+        this.liveStreams = body
+          .split(/\r?\n/)
+          .filter((l) => l !== '')
+          .map((l) => new URL(l.trim()));
+      }
     }
 
     const streamDuration = this.switchIntervalMs;
@@ -89,7 +108,9 @@ class BarkerStreamSwitchManager implements IStreamSwitchManager {
         type: ScheduleStreamType.LIVE,
         start_time: this.startOffset,
         end_time: this.startOffset + streamDuration,
-        uri: this.liveStreams[Math.floor(Math.random() * this.liveStreams.length)].toString(),
+        uri: this.liveStreams[
+          Math.floor(Math.random() * this.liveStreams.length)
+        ].toString()
       });
       this.startOffset += streamDuration;
       this.schedule.push({
@@ -99,7 +120,9 @@ class BarkerStreamSwitchManager implements IStreamSwitchManager {
         type: ScheduleStreamType.LIVE,
         start_time: this.startOffset,
         end_time: this.startOffset + streamDuration,
-        uri: this.liveStreams[Math.floor(Math.random() * this.liveStreams.length)].toString(),
+        uri: this.liveStreams[
+          Math.floor(Math.random() * this.liveStreams.length)
+        ].toString()
       });
       this.startOffset += streamDuration;
     }
@@ -107,26 +130,38 @@ class BarkerStreamSwitchManager implements IStreamSwitchManager {
   }
 }
 
-export class BarkerPlugin extends BasePlugin implements PluginInterface  {
+export class BarkerPlugin extends BasePlugin implements PluginInterface {
   constructor() {
     super('Barker');
   }
-  
+
   newAssetManager(): IAssetManager {
-    const vodToLoop = new URL('https://lab.cdn.eyevinn.technology/sto-slate.mp4/manifest.m3u8');
+    const vodToLoop = new URL(
+      'https://lab.cdn.eyevinn.technology/sto-slate.mp4/manifest.m3u8'
+    );
     return new BarkerAssetManager(vodToLoop);
   }
 
   newChannelManager(useDemuxedAudio: boolean): IChannelManager {
-    return new BarkerChannelManager(process.env.BARKER_CHANNEL_NAME ? process.env.BARKER_CHANNEL_NAME : "barker", useDemuxedAudio);
+    return new BarkerChannelManager(
+      process.env.BARKER_CHANNEL_NAME
+        ? process.env.BARKER_CHANNEL_NAME
+        : 'barker',
+      useDemuxedAudio
+    );
   }
 
   newStreamSwitchManager(): IStreamSwitchManager {
-    const liveStreamListUrl = process.env.BARKERLIST_URL ? 
-      process.env.BARKERLIST_URL 
-      : "https://testcontent.eyevinn.technology/fast/barkertest.txt";
-    const switchIntervalMs = process.env.SWITCH_INTERVAL_SEC ? parseInt(process.env.SWITCH_INTERVAL_SEC) * 1000 : undefined;
+    const liveStreamListUrl = process.env.BARKERLIST_URL
+      ? process.env.BARKERLIST_URL
+      : 'https://testcontent.eyevinn.technology/fast/barkertest.txt';
+    const switchIntervalMs = process.env.SWITCH_INTERVAL_SEC
+      ? parseInt(process.env.SWITCH_INTERVAL_SEC) * 1000
+      : undefined;
 
-    return new BarkerStreamSwitchManager(new URL(liveStreamListUrl), switchIntervalMs);
+    return new BarkerStreamSwitchManager(
+      new URL(liveStreamListUrl),
+      switchIntervalMs
+    );
   }
 }

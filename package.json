@@ -15,6 +15,8 @@
     "dev:docs": "mkdocs serve -a 127.0.0.1:2345",
     "server": "node ./dist/server.js",
     "start": "npm run server",
+    "lint": "eslint .",
+    "pretty": "prettier --check --ignore-unknown .",
     "test": "jest"
   },
   "targets": {
@@ -37,7 +39,14 @@
   "devDependencies": {
     "@types/jest": "^29.2.2",
     "@types/node": "^18.11.9",
+    "@typescript-eslint/eslint-plugin": "^5.59.2",
+    "eslint": "^8.39.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "parcel": "^2.8.0",
+    "prettier": "^2.8.8",
     "tsc-watch": "^5.0.3",
     "typescript": "^4.8.4"
   },

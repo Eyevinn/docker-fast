@@ -9,13 +9,13 @@ docker run -d -p 8000:8000 \
 
 The following plugins are available.
 
-| Plugin | Desc |
-| ------ | ---- |
-| Demo   | Random selection from a pre-defined static list of assets |
+| Plugin          | Desc                                                                                                          |
+| --------------- | ------------------------------------------------------------------------------------------------------------- |
+| Demo            | Random selection from a pre-defined static list of assets                                                     |
 | ScheduleService | Fetches schedule and channels from an [Eyevinn Schedule Service](https://github.com/Eyevinn/schedule-service) |
-| Loop | Produce a channel with a single VOD on loop |
-| Playlist | Produce a channel based on a playlist txt file |
-| Barker | Produce a barker channel by switching between live channels a given interval |
+| Loop            | Produce a channel with a single VOD on loop                                                                   |
+| Playlist        | Produce a channel based on a playlist txt file                                                                |
+| Barker          | Produce a barker channel by switching between live channels a given interval                                  |
 
 ## Demo Plugin Options
 

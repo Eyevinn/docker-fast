@@ -1,6 +1,6 @@
 ## Installation
 
-The services uses AWS DynamoDB as database store. 
+The services uses AWS DynamoDB as database store.
 
 ```
 docker run -d -p 8080:8080 \
@@ -29,6 +29,3 @@ docker run -d -p 8080:8080 \
   -e PORT=8080 \
   eyevinntechnology/schedule-service
 ```
-
-
-

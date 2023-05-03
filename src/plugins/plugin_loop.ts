@@ -1,10 +1,18 @@
-import { IAssetManager, IChannelManager, 
-  VodRequest, VodResponse, 
-  Channel, ChannelProfile, IStreamSwitchManager 
-} from "eyevinn-channel-engine";
+import {
+  IAssetManager,
+  IChannelManager,
+  VodRequest,
+  VodResponse,
+  Channel,
+  ChannelProfile,
+  IStreamSwitchManager
+} from 'eyevinn-channel-engine';
 
-import { BasePlugin, PluginInterface } from "./interface";
-import { getDefaultChannelAudioProfile, getDefaultChannelVideoProfile } from "./utils";
+import { BasePlugin, PluginInterface } from './interface';
+import {
+  getDefaultChannelAudioProfile,
+  getDefaultChannelVideoProfile
+} from './utils';
 
 class LoopAssetManager implements IAssetManager {
   private vodToLoop: URL;
@@ -13,11 +21,12 @@ class LoopAssetManager implements IAssetManager {
     this.vodToLoop = vodToLoop;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getNextVod(vodRequest: VodRequest): Promise<VodResponse> {
     const vodResponse = {
-      id: "loop",
-      title: "VOD on Loop",
-      uri: this.vodToLoop.toString(),
+      id: 'loop',
+      title: 'VOD on Loop',
+      uri: this.vodToLoop.toString()
     };
     return vodResponse;
   }
@@ -30,18 +39,20 @@ class LoopChannelManager implements IChannelManager {
   constructor(channelId: string, useDemuxedAudio: boolean) {
     this.channelId = channelId;
     this.useDemuxedAudio = useDemuxedAudio;
-    console.log(`Loop channel available at /channels/${this.channelId}/master.m3u8`);
+    console.log(
+      `Loop channel available at /channels/${this.channelId}/master.m3u8`
+    );
   }
 
   getChannels(): Channel[] {
-    let channel: Channel = {
+    const channel: Channel = {
       id: this.channelId,
       profile: this._getProfile()
     };
     if (this.useDemuxedAudio) {
-      channel.audioTracks = getDefaultChannelAudioProfile()
+      channel.audioTracks = getDefaultChannelAudioProfile();
     }
-    const channelList = [ channel ];
+    const channelList = [channel];
     return channelList;
   }
 
@@ -50,19 +61,25 @@ class LoopChannelManager implements IChannelManager {
   }
 }
 
-export class LoopPlugin extends BasePlugin implements PluginInterface  {
+export class LoopPlugin extends BasePlugin implements PluginInterface {
   constructor() {
     super('Loop');
   }
-  
+
   newAssetManager(): IAssetManager {
-    const vodToLoop = process.env.LOOP_VOD_URL ? new URL(process.env.LOOP_VOD_URL) 
-      : new URL("https://lab.cdn.eyevinn.technology/eyevinn-reel-feb-2023-_2Y7i4eOAi.mp4/manifest.m3u8");
+    const vodToLoop = process.env.LOOP_VOD_URL
+      ? new URL(process.env.LOOP_VOD_URL)
+      : new URL(
+          'https://lab.cdn.eyevinn.technology/eyevinn-reel-feb-2023-_2Y7i4eOAi.mp4/manifest.m3u8'
+        );
     return new LoopAssetManager(vodToLoop);
   }
 
   newChannelManager(useDemuxedAudio: boolean): IChannelManager {
-    return new LoopChannelManager(process.env.LOOP_CHANNEL_NAME ? process.env.LOOP_CHANNEL_NAME : "loop", useDemuxedAudio);
+    return new LoopChannelManager(
+      process.env.LOOP_CHANNEL_NAME ? process.env.LOOP_CHANNEL_NAME : 'loop',
+      useDemuxedAudio
+    );
   }
 
   newStreamSwitchManager(): IStreamSwitchManager {
