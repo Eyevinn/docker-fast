@@ -6,6 +6,12 @@ New Features:
 
 - Playlist plugin can handle a list of playlists
 
+### Version 1.4.1
+
+Channel Engine v4.0.20 including the following bugfix:
+
+- Handle VOD with byterange without offset
+
 ## Version 1.3.0
 
 New Features:
