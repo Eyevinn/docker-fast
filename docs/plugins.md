@@ -15,6 +15,7 @@ The following plugins are available.
 | ScheduleService | Fetches schedule and channels from an [Eyevinn Schedule Service](https://github.com/Eyevinn/schedule-service) |
 | Loop | Produce a channel with a single VOD on loop |
 | Playlist | Produce a channel based on a playlist txt file |
+| Barker | Produce a barker channel by switching between live channels a given interval |
 
 ## Demo Plugin Options
 
@@ -37,3 +38,9 @@ Channel with the HLS VOD to loop is then available at `/channels/loop/master.m3u
 - `PLAYLIST_CHANNEL_NAME`: The name of the channel (default `playlist`)
 
 To provide a set of playlists the `PLAYLIST_URL` is a comma separated list of channel name and playlist url pairs delimited by a pipe char (`|`): `PLAYLIST_URL="<CHANNEL_NAME1>|<URL1>,<CHANNEL_NAME2>|<URL2>"`. In this case the `PLAYLIST_CHANNEL_NAME` is overriden if set.
+
+## Barker Plugin Options
+
+- `BARKERLIST_URL`: URL to a txt file with list of live HLS streams where each line contains a URL to a HLS LIVE stream ([example](https://testcontent.eyevinn.technology/fast/barkertest.txt))
+- `BARKER_CHANNEL_NAME`: The name of the channel (default `barker`)
+- `SWITCH_INTERVAL_SEC`: How often it should switch between the streams (default 60 sec)
