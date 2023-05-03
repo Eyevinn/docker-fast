@@ -1,5 +1,11 @@
 # Release Notes
 
+## Version 1.5.0
+
+New Features:
+
+- New plugin to produce barker channel by switching between live channels at a given interval
+
 ## Version 1.4.0
 
 New Features:
