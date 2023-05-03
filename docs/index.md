@@ -44,6 +44,7 @@ curl -SL https://github.com/Eyevinn/docker-fast/releases/download/v1.1.1/docker-
 ```
 
 Running this command above it will spin up three Docker containers:
+
 - A local Dynamo DB instance that the Schedule Service uses.
 - A Schedule Service instance.
 - A Channel Engine instance.
@@ -98,7 +99,7 @@ The following environment variables can be set:
 - `OPTS_LANG_LIST`: Comma separated list of languages, e.g. (`"en,ja"`). First one is defined to be default
 - `OPTS_CHANNEL_PRESET`: Channel profile based on presets:
   - `DD`: Sterao (2) and Dolby Digital (6)
-  - `ATMOS`: Stereo (2) and Dolby Atmos track (16) 
+  - `ATMOS`: Stereo (2) and Dolby Atmos track (16)
 
 ### Advanced Audio
 

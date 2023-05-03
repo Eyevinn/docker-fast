@@ -1,7 +1,11 @@
-import { IAssetManager, IChannelManager, IStreamSwitchManager } from "eyevinn-channel-engine";
+import {
+  IAssetManager,
+  IChannelManager,
+  IStreamSwitchManager
+} from 'eyevinn-channel-engine';
 
 export interface PluginInterface {
-  newAssetManager: () => IAssetManager; 
+  newAssetManager: () => IAssetManager;
   newChannelManager: (useDemuxedAudio?: boolean) => IChannelManager;
   newStreamSwitchManager: () => IStreamSwitchManager;
 }

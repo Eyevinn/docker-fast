@@ -1,18 +1,27 @@
-import { BasePlugin, PluginInterface } from "./interface";
-import { IAssetManager, IChannelManager, IStreamSwitchManager, Schedule, VodRequest, VodResponse } from "eyevinn-channel-engine";
+import { BasePlugin, PluginInterface } from './interface';
+import {
+  IAssetManager,
+  IChannelManager,
+  IStreamSwitchManager,
+  Schedule,
+  VodRequest,
+  VodResponse
+} from 'eyevinn-channel-engine';
 import * as Adapter from '@eyevinn/schedule-service-adapter';
 
 class AdapterAssetManager implements IAssetManager {
   private adapterAssetManager: Adapter.AssetManager;
-  
+
   constructor(adapterChannelManager: Adapter.ChannelManager) {
-    this.adapterAssetManager = new Adapter.AssetManager({ 
-      channelManager: adapterChannelManager,
+    this.adapterAssetManager = new Adapter.AssetManager({
+      channelManager: adapterChannelManager
     });
   }
 
   async getNextVod(vodRequest: VodRequest): Promise<VodResponse> {
-    return await this.adapterAssetManager.getNextVod({ playlistId: vodRequest.playlistId });
+    return await this.adapterAssetManager.getNextVod({
+      playlistId: vodRequest.playlistId
+    });
   }
 
   handleError(err: string, vodResponse: VodResponse) {
@@ -25,30 +34,36 @@ class AdapterStreamSwitchManager implements IStreamSwitchManager {
 
   constructor(adapterChannelManager: Adapter.ChannelManager) {
     this.adapterStreamSwitchManager = new Adapter.StreamSwitchManager({
-      channelManager: adapterChannelManager,
+      channelManager: adapterChannelManager
     });
   }
 
   getSchedule(channelId: string): Promise<Schedule[]> {
     return new Promise((resolve, reject) => {
-      this.adapterStreamSwitchManager.getSchedule(channelId)
-      .then((s: Schedule[]) => {
-        resolve(s);
-      })
-      .catch(reject);
+      this.adapterStreamSwitchManager
+        .getSchedule(channelId)
+        .then((s: Schedule[]) => {
+          resolve(s);
+        })
+        .catch(reject);
     });
   }
 }
 
-export class ScheduleServicePlugin extends BasePlugin implements PluginInterface  {
+export class ScheduleServicePlugin
+  extends BasePlugin
+  implements PluginInterface
+{
   private adapterChannelManager: Adapter.ChannelManager;
 
   constructor() {
     super('ScheduleService');
-    const endpointUrl = 
-      new URL(process.env.SCHEDULE_SERVICE_API_URL || 'https://schedule.vc.eyevinn.technology/api/v1');
+    const endpointUrl = new URL(
+      process.env.SCHEDULE_SERVICE_API_URL ||
+        'https://schedule.vc.eyevinn.technology/api/v1'
+    );
     this.adapterChannelManager = new Adapter.ChannelManager({
-      scheduleServiceEndpoint: endpointUrl,
+      scheduleServiceEndpoint: endpointUrl
     });
   }
 
@@ -63,5 +78,5 @@ export class ScheduleServicePlugin extends BasePlugin implements PluginInterface
 
   newStreamSwitchManager(): IStreamSwitchManager {
     return new AdapterStreamSwitchManager(this.adapterChannelManager);
-  };
+  }
 }
