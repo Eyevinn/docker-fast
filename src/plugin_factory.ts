@@ -3,6 +3,7 @@ import { PluginInterface } from "./plugins/interface";
 import { ScheduleServicePlugin } from "./plugins/plugin_schedule_service";
 import { LoopPlugin } from "./plugins/plugin_loop";
 import { PlaylistPlugin } from "./plugins/plugin_playlist";
+import { BarkerPlugin } from "./plugins/plugin_barker";
 
 function create<T extends PluginInterface>(c: { new(): T }): T {
   return new c();  
@@ -18,6 +19,8 @@ export function PluginFactory(pluginName: string) {
       return create(LoopPlugin);
     case 'Playlist':
       return create(PlaylistPlugin);
+    case 'Barker':
+      return create(BarkerPlugin);
     default:
       throw new Error(`Plugin ${pluginName} is not available`);
   }

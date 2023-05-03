@@ -1,6 +1,8 @@
 import { AudioTracks, ChannelProfile } from "eyevinn-channel-engine";
 import { Language } from "./interface";
 
+import { uuid } from 'uuidv4';
+
 const DEFAULT_VIDEO_STREAMS: ChannelProfile[] = [
   { bw: 324586, codecs: "avc1.64000D,mp4a.40.2", resolution: [416, 234] },
   { bw: 471661, codecs: "avc1.64001E,mp4a.40.2", resolution: [640, 360] },
@@ -110,4 +112,8 @@ export function getDefaultChannelAudioProfile(): AudioTracks[] {
   } else {
     return DEFAULT_AUDIO_TRACKS;
   }
+}
+
+export function generateId(): string {
+  return uuid();
 }
