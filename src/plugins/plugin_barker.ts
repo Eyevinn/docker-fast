@@ -74,7 +74,9 @@ class BarkerStreamSwitchManager implements IStreamSwitchManager {
 
   constructor(liveStreamListUrl: URL, switchIntervalMs?: number) {
     this.liveStreamListUrl = liveStreamListUrl;
-    this.switchIntervalMs = switchIntervalMs;
+    if (switchIntervalMs) {
+      this.switchIntervalMs = switchIntervalMs;
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
