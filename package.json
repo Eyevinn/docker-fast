@@ -8,6 +8,7 @@
     "build:ui": "parcel build src/ui/index.html",
     "build:lp": "parcel build --target website",
     "build:docs": "mkdocs build",
+    "version:rc": "npm version prerelease --preid=rc",
     "postversion": "git push && git push --tags",
     "dev": "NODE_ENV=development tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node --inspect ./dist/server.js\"",
     "dev:ui": "parcel -p 1234 --no-cache src/ui/index.html",
