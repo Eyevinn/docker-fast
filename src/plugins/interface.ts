@@ -6,7 +6,10 @@ import {
 
 export interface PluginInterface {
   newAssetManager: () => IAssetManager;
-  newChannelManager: (useDemuxedAudio?: boolean) => IChannelManager;
+  newChannelManager: (
+    useDemuxedAudio?: boolean,
+    useVTTSubtitles?: boolean
+  ) => IChannelManager;
   newStreamSwitchManager: () => IStreamSwitchManager;
 }
 
