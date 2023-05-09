@@ -12,6 +12,7 @@ import fetch from 'node-fetch';
 import { BasePlugin, PluginInterface } from './interface';
 import {
   getDefaultChannelAudioProfile,
+  getDefaultChannelSubtitleProfile,
   getDefaultChannelVideoProfile
 } from './utils';
 
@@ -116,10 +117,16 @@ class PlaylistAssetManager implements IAssetManager {
 class PlaylistChannelManager implements IChannelManager {
   private channelIds: string[];
   private useDemuxedAudio: boolean;
+  private useVTTSubtitles: boolean;
 
-  constructor(channelIds: string[], useDemuxedAudio: boolean) {
+  constructor(
+    channelIds: string[],
+    useDemuxedAudio: boolean,
+    useVTTSubtitles: boolean
+  ) {
     this.channelIds = channelIds;
     this.useDemuxedAudio = useDemuxedAudio;
+    this.useVTTSubtitles = useVTTSubtitles;
     this.channelIds.forEach((id) => {
       console.log(`Playlist channel available at /channels/${id}/master.m3u8`);
     });
@@ -134,6 +141,9 @@ class PlaylistChannelManager implements IChannelManager {
       };
       if (this.useDemuxedAudio) {
         channel.audioTracks = getDefaultChannelAudioProfile();
+      }
+      if (this.useVTTSubtitles) {
+        channel.subtitleTracks = getDefaultChannelSubtitleProfile();
       }
       channelList.push(channel);
     });
@@ -158,14 +168,21 @@ export class PlaylistPlugin extends BasePlugin implements PluginInterface {
     return new PlaylistAssetManager(parsePlaylistUrlParam(param));
   }
 
-  newChannelManager(useDemuxedAudio: boolean): IChannelManager {
+  newChannelManager(
+    useDemuxedAudio: boolean,
+    useVTTSubtitles: boolean
+  ): IChannelManager {
     const param = process.env.PLAYLIST_URL
       ? process.env.PLAYLIST_URL
       : 'https://testcontent.eyevinn.technology/fast/fast-playlist.txt';
 
     const channels = parsePlaylistUrlParam(param).map((p) => p.id);
 
-    return new PlaylistChannelManager(channels, useDemuxedAudio);
+    return new PlaylistChannelManager(
+      channels,
+      useDemuxedAudio,
+      useVTTSubtitles
+    );
   }
 
   newStreamSwitchManager(): IStreamSwitchManager {
