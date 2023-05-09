@@ -53,7 +53,7 @@
   },
   "dependencies": {
     "@eyevinn/schedule-service-adapter": "^0.4.1",
-    "eyevinn-channel-engine": "4.0.20",
+    "eyevinn-channel-engine": "4.2.0-rc.3",
     "finalhandler": "^1.2.0",
     "node-fetch": "^2.6.5",
     "serve-static": "^1.15.0",

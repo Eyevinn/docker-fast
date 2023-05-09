@@ -11,7 +11,8 @@ import {
 import { BasePlugin, PluginInterface } from './interface';
 import {
   getDefaultChannelAudioProfile,
-  getDefaultChannelVideoProfile
+  getDefaultChannelVideoProfile,
+  getDefaultChannelSubtitleProfile
 } from './utils';
 
 class LoopAssetManager implements IAssetManager {
@@ -35,10 +36,16 @@ class LoopAssetManager implements IAssetManager {
 class LoopChannelManager implements IChannelManager {
   private channelId: string;
   private useDemuxedAudio: boolean;
+  private useVTTSubtitles: boolean;
 
-  constructor(channelId: string, useDemuxedAudio: boolean) {
+  constructor(
+    channelId: string,
+    useDemuxedAudio: boolean,
+    useVTTSubtitles: boolean
+  ) {
     this.channelId = channelId;
     this.useDemuxedAudio = useDemuxedAudio;
+    this.useVTTSubtitles = useVTTSubtitles;
     console.log(
       `Loop channel available at /channels/${this.channelId}/master.m3u8`
     );
@@ -51,6 +58,9 @@ class LoopChannelManager implements IChannelManager {
     };
     if (this.useDemuxedAudio) {
       channel.audioTracks = getDefaultChannelAudioProfile();
+    }
+    if (this.useVTTSubtitles) {
+      channel.subtitleTracks = getDefaultChannelSubtitleProfile();
     }
     const channelList = [channel];
     return channelList;
@@ -75,10 +85,14 @@ export class LoopPlugin extends BasePlugin implements PluginInterface {
     return new LoopAssetManager(vodToLoop);
   }
 
-  newChannelManager(useDemuxedAudio: boolean): IChannelManager {
+  newChannelManager(
+    useDemuxedAudio: boolean,
+    useVTTSubtitles: boolean
+  ): IChannelManager {
     return new LoopChannelManager(
       process.env.LOOP_CHANNEL_NAME ? process.env.LOOP_CHANNEL_NAME : 'loop',
-      useDemuxedAudio
+      useDemuxedAudio,
+      useVTTSubtitles
     );
   }
 

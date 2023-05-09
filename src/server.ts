@@ -22,6 +22,9 @@ const plugin = PluginFactory(pluginName);
 const useDemuxedAudio = process.env.OPTS_USE_DEMUXED_AUDIO
   ? isTrue(process.env.OPTS_USE_DEMUXED_AUDIO)
   : true;
+const useVTTSubtitles = process.env.OPTS_USE_VTT_SUBTITLES
+  ? isTrue(process.env.OPTS_USE_VTT_SUBTITLES)
+  : true;
 const defaultSlateUri = process.env.OPTS_DEFAULT_SLATE_URI
   ? process.env.OPTS_DEFAULT_SLATE_URI
   : 'https://lab.cdn.eyevinn.technology/sto-slate.mp4/manifest.m3u8';
@@ -33,8 +36,9 @@ const engine = new ChannelEngine(plugin.newAssetManager(), {
   heartbeat,
   defaultSlateUri,
   useDemuxedAudio,
+  useVTTSubtitles,
   alwaysNewSegments: true,
-  channelManager: plugin.newChannelManager(useDemuxedAudio),
+  channelManager: plugin.newChannelManager(useDemuxedAudio, useVTTSubtitles),
   streamSwitchManager: plugin.newStreamSwitchManager()
 });
 engine.start();

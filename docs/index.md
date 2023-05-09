@@ -92,11 +92,13 @@ The following environment variables can be set:
 - `UI_PORT`: Which port to bind the UI to.
 - `FAST_PLUGIN`: Which [plugin](plugins.md) to use.
 - `OPTS_USE_DEMUXED_AUDIO`: Use demuxed audio (default: true).
+- `OPTS_USE_VTT_SUBTITLES`: Use VTT subtitles whenever available (default: true).
 - `OPTS_DEFAULT_SLATE_URI`: URI to default slate URL.
 - `OPTS_HEARTBEAT_URL`: Heartbeat url (default: `/`).
 - `OPTS_STREAM_ORDER`: Stream order as comma separated list of heights (default: `"458,1080,720,286,214"`)
 - `OPTS_VIDEO_STREAMS`: Override video profile using a comma separated list of resolution and bandwidth tupels. For example: `-e OPTS_VIDEO_STREAMS="416x234:324586,640x360:471661"`
 - `OPTS_LANG_LIST`: Comma separated list of languages, e.g. (`"en,ja"`). First one is defined to be default
+- `OPTS_LANG_LIST_SUBS`: Comma separated list of subtitle languages, e.g. (`"en,ja"`). First one is defined to be default
 - `OPTS_CHANNEL_PRESET`: Channel profile based on presets:
   - `DD`: Sterao (2) and Dolby Digital (6)
   - `ATMOS`: Stereo (2) and Dolby Atmos track (16)

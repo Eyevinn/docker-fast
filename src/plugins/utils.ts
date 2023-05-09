@@ -1,4 +1,8 @@
-import { AudioTracks, ChannelProfile } from 'eyevinn-channel-engine';
+import {
+  AudioTracks,
+  ChannelProfile,
+  SubtitleTracks
+} from 'eyevinn-channel-engine';
 import { Language } from './interface';
 
 import { uuid } from 'uuidv4';
@@ -14,6 +18,10 @@ const DEFAULT_VIDEO_STREAMS: ChannelProfile[] = [
 
 const DEFAULT_AUDIO_TRACKS: AudioTracks[] = [
   { language: 'en', name: 'English', default: true }
+];
+
+const DEFAULT_SUBTITLE_TRACKS: SubtitleTracks[] = [
+  { language: 'sv', name: 'Swedish', default: true }
 ];
 
 const CHANNEL_PRESETS = {
@@ -173,6 +181,25 @@ export function getDefaultChannelAudioProfile(): AudioTracks[] {
     return CHANNEL_PRESETS[process.env.OPTS_CHANNEL_PRESET].audio;
   } else {
     return DEFAULT_AUDIO_TRACKS;
+  }
+}
+
+export function getDefaultChannelSubtitleProfile(): SubtitleTracks[] {
+  const langList = process.env.OPTS_LANG_LIST_SUBS;
+  if (langList) {
+    const subtitleTracks = [];
+    const languages = langList.split(',');
+    for (let i = 0; i < languages.length; i++) {
+      const lang: Language = {
+        language: languages[i],
+        name: languages[i],
+        default: i === 0
+      };
+      subtitleTracks.push(lang);
+    }
+    return subtitleTracks;
+  } else {
+    return DEFAULT_SUBTITLE_TRACKS;
   }
 }
 
