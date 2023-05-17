@@ -1,5 +1,11 @@
 # Release Notes
 
+## Version 1.6.0
+
+New Features:
+
+- Support for VTT subtitles
+
 ## Version 1.5.0
 
 New Features:
