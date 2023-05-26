@@ -17,6 +17,8 @@ Start an instance with 50 demo channels.
 ```
 docker run -d -p 8000:8000 -p 8001:8001 \
   -e DEMO_NUM_CHANNELS=50 \
+  -e OPTS_USE_DEMUXED_AUDIO=false \
+  -e OPTS_USE_VTT_SUBTITLES=false \
   eyevinntechnology/fast-engine
 ```
 

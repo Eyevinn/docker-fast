@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fast-engine-deployment
+  labels:
+    app: fast-engine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fast-engine
+  template:
+    metadata:
+      labels:
+        app: fast-engine
+    spec:
+      containers:
+      - name: fast-engine
+        image: eyevinntechnology/fast-engine:v1.6.0
+        env:
+        - name: DEMO_NUM_CHANNELS
+          value: "10"
+        - name: OPTS_USE_DEMUXED_AUDIO
+          value: "false"
+        - name: OPTS_USE_VTT_SUBTITLES
+          value: "false"
+        ports:
+        - containerPort: 8000
