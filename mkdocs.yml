@@ -7,6 +7,7 @@ nav:
   - Plugins: 
     - Available Plugins: plugins.md
     - Schedule Service: plugins/schedule_service.md
+  - Deployment: deployment.md
   - Origin Services:
     - Overview: origins.md
     - AWS MediaPackage: origin/aws_mediapackage.md
