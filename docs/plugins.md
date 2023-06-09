@@ -16,6 +16,7 @@ The following plugins are available.
 | Loop            | Produce a channel with a single VOD on loop                                                                   |
 | Playlist        | Produce a channel based on a playlist txt file                                                                |
 | Barker          | Produce a barker channel by switching between live channels a given interval                                  |
+| WebHook         | Use a custom webhook to decide what VOD to play next                                                          |
 
 ## Demo Plugin Options
 
@@ -44,3 +45,10 @@ To provide a set of playlists the `PLAYLIST_URL` is a comma separated list of ch
 - `BARKERLIST_URL`: URL to a txt file with list of live HLS streams where each line contains a URL to a HLS LIVE stream ([example](https://testcontent.eyevinn.technology/fast/barkertest.txt))
 - `BARKER_CHANNEL_NAME`: The name of the channel (default `barker`)
 - `SWITCH_INTERVAL_SEC`: How often it should switch between the streams (default 60 sec)
+
+## WebHook Plugin Options
+
+- `WEBHOOK_URL`: URL to the custom webhook, default is `http://localhost:8002/nextVod`
+- `WEBHOOK_CHANNEL_NAME`: The name of the channel (default `hls`)
+
+An example of a webhook and how this plugin can be used can be found [here](plugins/webhook.md).

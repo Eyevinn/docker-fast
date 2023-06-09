@@ -46,6 +46,7 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "fastify": "^4.17.0",
     "parcel": "^2.8.0",
     "prettier": "^2.8.8",
     "tsc-watch": "^5.0.3",
@@ -53,7 +54,7 @@
   },
   "dependencies": {
     "@eyevinn/schedule-service-adapter": "^0.4.1",
-    "eyevinn-channel-engine": "4.2.0",
+    "eyevinn-channel-engine": "4.2.3",
     "finalhandler": "^1.2.0",
     "node-fetch": "^2.6.5",
     "serve-static": "^1.15.0",
