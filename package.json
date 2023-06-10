@@ -1,6 +1,6 @@
 {
   "name": "@eyevinn/fast",
-  "version": "1.6.0",
+  "version": "1.7.0-rc.0",
   "description": "Open Source Sustainable FAST Channel Engine",
   "main": "dist/server.js",
   "scripts": {
