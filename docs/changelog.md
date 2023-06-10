@@ -1,10 +1,24 @@
 # Release Notes
 
+## Version 1.7.0
+
+New Features:
+
+- New plugin that enables the option to use a custom webhook (HTTP callback) for the engine to decide what to play next in a channel
+
+Channel Engine v4.2.3 including the following bugfixes and features:
+
+- Handle error when switching LIVE to LIVE with preroll
+- Fix edge case when new leader not initiating next vod correctly (HA mode)
+- Option to create channel on demand (by client request)
+
 ## Version 1.6.0
 
 New Features:
 
 - Support for VTT subtitles
+
+Channel Engine v4.2.0 including the support for VTT subtitles.
 
 ## Version 1.5.0
 
