@@ -7,6 +7,7 @@ import {
   ChannelProfile,
   IStreamSwitchManager
 } from 'eyevinn-channel-engine';
+import fetch from 'node-fetch';
 
 import { BasePlugin, PluginInterface } from './interface';
 import {
