@@ -1,6 +1,6 @@
 # Release Notes
 
-## Version 1.7.1
+## Version 1.7.0
 
 New Features:
 
@@ -11,6 +11,10 @@ Channel Engine v4.2.3 including the following bugfixes and features:
 - Handle error when switching LIVE to LIVE with preroll
 - Fix edge case when new leader not initiating next vod correctly (HA mode)
 - Option to create channel on demand (by client request)
+
+### Version 1.7.2
+
+Resolves a build error in 1.7.0 release
 
 ## Version 1.6.0
 
