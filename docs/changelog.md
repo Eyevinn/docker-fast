@@ -1,6 +1,6 @@
 # Release Notes
 
-## Version 1.7.0
+## Version 1.7.1
 
 New Features:
 
