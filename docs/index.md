@@ -10,6 +10,10 @@ Based on VOD2Live Technology and the [open source Eyevinn Channel Engine library
 
 ## Quick Start
 
+### Hosted Engine (BETA)
+
+This FAST engine is available as Open Source as a Service (BETA) if you want to quickly try it out. More information in the [OSaaS HOWTO](osaas.md).
+
 ### Demo Installation
 
 Start an instance with 50 demo channels.
@@ -42,7 +46,7 @@ A channel based on this playlist is then available at `http://localhost:8000/cha
 To spin up a Schedule Service and FAST Channel Engine.
 
 ```bash
-curl -SL https://github.com/Eyevinn/docker-fast/releases/download/v1.1.1/docker-compose.yml | docker-compose -f - up
+curl -SL https://github.com/Eyevinn/docker-fast/releases/download/<version>/docker-compose.yml | docker-compose -f - up
 ```
 
 Running this command above it will spin up three Docker containers:
