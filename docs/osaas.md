@@ -4,7 +4,6 @@ This FAST engine is available as Open Source as a Service (in BETA) provided by 
 
 In the example belows we are using curl but you can also use the [online API documentation](http://ce-api-osaas-stage.eyevinn.technology:8080/docs) instead.
 
-
 ## Create trial-token
 
 Generate a trial-token in our demo environment. The trial-token limits you to maximum of 3 channels and running in our demo environment. Replace `YOUR_ORG` and `YOUR_EMAIL` in the command below.
@@ -54,12 +53,12 @@ In return you should get something like this.
 
 ```json
 [
- {
+  {
     "id": "eyevinn-mychannel-6847b98948-ftpg2",
     "name": "mychannel",
     "type": "Loop",
     "url": "http://eyevinn-mychannel.ce-osaas-stage.eyevinn.technology/channels/hls/master.m3u8"
-  },
+  }
 ]
 ```
 
