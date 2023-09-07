@@ -31,12 +31,16 @@ const defaultSlateUri = process.env.OPTS_DEFAULT_SLATE_URI
 const heartbeat = process.env.OPTS_HEARTBEAT_URL
   ? process.env.OPTS_HEARTBEAT_URL
   : '/';
+const vttBasePath = process.env.VTT_BASE_PATH
+  ? process.env.VTT_BASE_PATH
+  : `/vtt`;
 
 const engine = new ChannelEngine(plugin.newAssetManager(), {
   heartbeat,
   defaultSlateUri,
   useDemuxedAudio,
   useVTTSubtitles,
+  vttBasePath,
   alwaysNewSegments: true,
   channelManager: plugin.newChannelManager(useDemuxedAudio, useVTTSubtitles),
   streamSwitchManager: plugin.newStreamSwitchManager()
