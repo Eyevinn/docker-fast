@@ -31,8 +31,8 @@ const defaultSlateUri = process.env.OPTS_DEFAULT_SLATE_URI
 const heartbeat = process.env.OPTS_HEARTBEAT_URL
   ? process.env.OPTS_HEARTBEAT_URL
   : '/';
-const vttBasePath = process.env.VTT_BASE_PATH
-  ? process.env.VTT_BASE_PATH
+const vttBasePath = process.env.OPTS_VTT_BASE_PATH
+  ? process.env.OPTS_VTT_BASE_PATH
   : `/vtt`;
 
 const engine = new ChannelEngine(plugin.newAssetManager(), {
