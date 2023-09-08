@@ -106,8 +106,9 @@ The following environment variables can be set:
 - `OPTS_LANG_LIST`: Comma separated list of languages, e.g. (`"en,ja"`). First one is defined to be default
 - `OPTS_LANG_LIST_SUBS`: Comma separated list of subtitle languages, e.g. (`"en,ja"`). First one is defined to be default
 - `OPTS_CHANNEL_PRESET`: Channel profile based on presets:
-  - `DD`: Sterao (2) and Dolby Digital (6)
+  - `DD`: Stereo (2) and Dolby Digital (6)
   - `ATMOS`: Stereo (2) and Dolby Atmos track (16)
+  - `HEVC`: HEVC codec with stereo (2)
 - `OPTS_VTT_BASE_PATH`: Base path for vtt dummy and slice endpoints (default: `/vtt`)
 
 ### Advanced Audio
