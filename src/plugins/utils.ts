@@ -108,6 +108,29 @@ const CHANNEL_PRESETS = {
       }
     ],
     audio: [{ language: 'en', name: 'English', default: true }]
+  },
+  HEVC: {
+    video: [
+      {
+        resolution: [640, 360],
+        bw: 1078026,
+        codecs: 'hvc1.2.4.L123.90,mp4a.40.2',
+        channels: '2'
+      },
+      {
+        resolution: [1280, 720],
+        bw: 2627520,
+        codecs: 'hvc1.2.4.L123.90,mp4a.40.2',
+        channels: 2
+      },
+      {
+        resolution: [1920, 1080],
+        bw: 4589413,
+        codecs: 'hvc1.2.4.L123.90,mp4a.40.2',
+        channels: 2
+      }
+    ],
+    audio: [{ language: 'en', name: 'English', default: true }]
   }
 };
 
