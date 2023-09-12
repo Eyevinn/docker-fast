@@ -2,7 +2,7 @@
 
 This FAST engine is available as Open Source as a Service (in BETA) provided by Eyevinn Technology when you want to quickly try it out and get started. To try it out you just need to follow the following instructions. For more information about Open Source as a Service and pricing contact [sales@eyevinn.se](mailto:sales@eyevinn.se)
 
-In the example belows we are using curl but you can also use the [online API documentation](http://ce-api-osaas-stage.eyevinn.technology:8080/docs) instead.
+In the example belows we are using curl but you can also use the [online API documentation](https://api-ce.stage.osaas.io/docs) instead.
 
 ## Create trial-token
 
@@ -10,7 +10,7 @@ Generate a trial-token in our demo environment. The trial-token limits you to ma
 
 ```bash
 curl -X 'POST' \
-  'http://ce-api-osaas-stage.eyevinn.technology:8080/token' \
+  'https://api-ce.stage.osaas.io/token' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -27,7 +27,7 @@ Create a channel by looping a VOD with this command. Replace `JWT_TOKEN` with th
 
 ```bash
 curl -X 'POST' \
-  'http://ce-api-osaas-stage.eyevinn.technology:8080/channel' \
+  'https://api-ce.stage.osaas.io/channel' \
   -H 'accept: application/json' \
   -H 'x-jwt: Bearer JWT_TOKEN' \
   -H 'Content-Type: application/json' \
@@ -44,7 +44,7 @@ To list all the channels that you have created run the following command. Replac
 
 ```bash
 curl -X 'GET' \
-  'http://ce-api-osaas-stage.eyevinn.technology:8080/channel' \
+  'https://api-ce.stage.osaas.io/channel' \
   -H 'accept: application/json' \
   -H 'x-jwt: Bearer JWT_TOKEN'
 ```
@@ -54,10 +54,10 @@ In return you should get something like this.
 ```json
 [
   {
-    "id": "eyevinn-mychannel-6847b98948-ftpg2",
+    "id": "eyevinn-mychannel",
     "name": "mychannel",
     "type": "Loop",
-    "url": "http://eyevinn-mychannel.ce-osaas-stage.eyevinn.technology/channels/hls/master.m3u8"
+    "url": "https://eyevinn.ce.stage.osaas.io/channels/mychannel/master.m3u8"
   }
 ]
 ```
@@ -68,7 +68,7 @@ To create a channel that uses a custom webhook you can run the following command
 
 ```bash
 curl -X 'POST' \
-  'http://ce-api-osaas-stage.eyevinn.technology:8080/channel' \
+  'https://api-ce.stage.osaas.io/channel' \
   -H 'accept: application/json' \
   -H 'x-jwt: Bearer JWT_TOKEN' \
   -H 'Content-Type: application/json' \
@@ -83,11 +83,11 @@ Where you would replace the `https://nextvod.dev.eyevinn.technology` with the UR
 
 ## Remove a channel
 
-To remove a channel you run the following and replace the `eyevinn-mychannel-6847b98948-ftpg2` with the channel id of your channel.
+To remove a channel you run the following and replace the `eyevinn-mychannel` with the channel id of your channel.
 
 ```bash
 curl -X 'DELETE' \
-  'http://ce-api-osaas-stage.eyevinn.technology:8080/channel/eyevinn-mychannel-6847b98948-ftpg2' \
+  'https://api-ce.stage.osaas.io/eyevinn-mychannel' \
   -H 'accept: application/json' \
   -H 'x-jwt: Bearer JWT_TOKEN'
 ```
