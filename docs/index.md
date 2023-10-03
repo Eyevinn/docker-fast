@@ -110,6 +110,7 @@ The following environment variables can be set:
   - `ATMOS`: Stereo (2) and Dolby Atmos track (16)
   - `HEVC`: HEVC codec with stereo (2)
 - `OPTS_VTT_BASE_PATH`: Base path for vtt dummy and slice endpoints (default: `/vtt`)
+- `OPTS_STITCH_ENDPOINT`: [Stitch endpoint](https://github.com/Eyevinn/lambda-stitch) used for stitching prerolls in VODs
 
 ### Advanced Audio
 
@@ -122,6 +123,20 @@ docker run -p 8000:8000 \
   -e OPTS_CHANNEL_PRESET=ATMOS \
   -e OPTS_LANG_LIST=ja,en \
   eyevinntechnology/fast-engine
+```
+
+### Insert house ads for downstream SSAI ad replacement
+
+House ads can be inserted as preroll to each VOD and decorated with necessary HLS tags to allow downstream SSAI ad replacement and monetization.
+
+```
+docker run -p 8000:8000 \
+  -e FAST_PLUGIN=Playlist \
+  -e PLAYLIST_URL=https://testcontent.eyevinn.technology/fast/fastdemo.txt \
+  -e OPTS_USE_DEMUXED_AUDIO=false \
+  -e OPTS_STITCH_ENDPOINT=http://lambda.eyevinn.technology/stitch \
+  -e PLAYLIST_PREROLL_URL=https://lab.cdn.eyevinn.technology/sto-slate.mp4/manifest.m3u8 \
+  -e PLAYLIST_PREROLL_DURATION_MS=10000 npm start
 ```
 
 ### Multiview

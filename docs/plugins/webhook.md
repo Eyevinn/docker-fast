@@ -12,6 +12,10 @@ interface NextVodResponse {
   id: string;
   title: string;
   hlsUrl: string;
+  prerollUrl?: string;
+  prerollDurationMs?: number;
+  desiredOffsetMs?: number;
+  desiredDurationMs?: number;
 }
 
 interface NextVodQuerystring {

@@ -30,3 +30,14 @@ export interface Language {
   name: string;
   default: boolean;
 }
+
+export interface StitchPayloadBreak {
+  pos: number; // ms
+  duration: number; // ms
+  url: string;
+}
+
+export interface StitchPayload {
+  uri: string;
+  breaks: StitchPayloadBreak[];
+}

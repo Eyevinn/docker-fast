@@ -30,6 +30,8 @@ The following plugins are available.
 
 - `LOOP_VOD_URL`: URL to the HLS VOD to loop.
 - `LOOP_CHANNEL_NAME`: The name of the channel (default `loop`)
+- `LOOP_PREROLL_URL`: URL for a preroll to insert before the HLS VOD
+- `LOOP_PREROLL_DURATION_MS`: Duration of preroll in milliseconds
 
 Channel with the HLS VOD to loop is then available at `/channels/loop/master.m3u8`
 
@@ -37,6 +39,8 @@ Channel with the HLS VOD to loop is then available at `/channels/loop/master.m3u
 
 - `PLAYLIST_URL`: URL to the playlist txt file. A txt file where each line contains a URL to a HLS VOD ([example](https://testcontent.eyevinn.technology/fast/fast-playlist.txt))
 - `PLAYLIST_CHANNEL_NAME`: The name of the channel (default `playlist`)
+- `PLAYLIST_PREROLL_URL`: URL for a preroll to insert before the HLS VOD
+- `PLAYLIST_PREROLL_DURATION_MS`: Duration of preroll in milliseconds
 
 To provide a set of playlists the `PLAYLIST_URL` is a comma separated list of channel name and playlist url pairs delimited by a pipe char (`|`): `PLAYLIST_URL="<CHANNEL_NAME1>|<URL1>,<CHANNEL_NAME2>|<URL2>"`. In this case the `PLAYLIST_CHANNEL_NAME` is overriden if set.
 
