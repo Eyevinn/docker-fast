@@ -1,5 +1,12 @@
 # Release Notes
 
+## Version 1.8.0
+
+New Features:
+
+- All plugins now supporting insertion of prerolls (house ads). This functionality requires an external stitcher endpoint.
+- WebHook plugin now supports trimming of VOD by setting a start offset and / or duration.
+
 ## Version 1.7.0
 
 New Features:
@@ -15,6 +22,14 @@ Channel Engine v4.2.3 including the following bugfixes and features:
 ### Version 1.7.2
 
 Resolves a build error in 1.7.0 release
+
+### Version 1.7.3
+
+Configurable VTT base path
+
+### Version 1.7.4
+
+Preset for channels with HEVC content
 
 ## Version 1.6.0
 
