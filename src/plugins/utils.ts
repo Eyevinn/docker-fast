@@ -3,7 +3,7 @@ import {
   ChannelProfile,
   SubtitleTracks
 } from 'eyevinn-channel-engine';
-import { Language } from './interface';
+import { Language, StitchPayload } from './interface';
 
 import { uuid } from 'uuidv4';
 
@@ -228,4 +228,34 @@ export function getDefaultChannelSubtitleProfile(): SubtitleTracks[] {
 
 export function generateId(): string {
   return uuid();
+}
+
+function serialize<T>(payload: T) {
+  const buff = Buffer.from(JSON.stringify(payload));
+  return buff.toString('base64');
+}
+
+export function getVodUrlWithPreroll(
+  url: string,
+  prerollUrl: string,
+  prerollDurationMs: number
+): string {
+  if (process.env.OPTS_STITCH_ENDPOINT) {
+    const payload: StitchPayload = {
+      uri: url,
+      breaks: [
+        {
+          pos: 0,
+          duration: prerollDurationMs,
+          url: prerollUrl
+        }
+      ]
+    };
+    return (
+      process.env.OPTS_STITCH_ENDPOINT +
+      `/master.m3u8?payload=` +
+      serialize<StitchPayload>(payload)
+    );
+  }
+  return url;
 }

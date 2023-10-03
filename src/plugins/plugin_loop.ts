@@ -12,22 +12,35 @@ import { BasePlugin, PluginInterface } from './interface';
 import {
   getDefaultChannelAudioProfile,
   getDefaultChannelVideoProfile,
-  getDefaultChannelSubtitleProfile
+  getDefaultChannelSubtitleProfile,
+  getVodUrlWithPreroll
 } from './utils';
 
 class LoopAssetManager implements IAssetManager {
   private vodToLoop: URL;
+  private prerollVod: URL = undefined;
+  private prerollDurationMs: number;
 
-  constructor(vodToLoop: URL) {
+  constructor(vodToLoop: URL, prerollVod?: URL, prerollDurationMs?: number) {
     this.vodToLoop = vodToLoop;
+    this.prerollVod = prerollVod;
+    this.prerollDurationMs = prerollDurationMs;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getNextVod(vodRequest: VodRequest): Promise<VodResponse> {
+    let hlsUrl = this.vodToLoop.toString();
+    if (this.prerollVod) {
+      hlsUrl = getVodUrlWithPreroll(
+        this.vodToLoop.toString(),
+        this.prerollVod.toString(),
+        this.prerollDurationMs
+      );
+    }
     const vodResponse = {
       id: 'loop',
       title: 'VOD on Loop',
-      uri: this.vodToLoop.toString()
+      uri: hlsUrl
     };
     return vodResponse;
   }
@@ -82,7 +95,14 @@ export class LoopPlugin extends BasePlugin implements PluginInterface {
       : new URL(
           'https://lab.cdn.eyevinn.technology/eyevinn-reel-feb-2023-_2Y7i4eOAi.mp4/manifest.m3u8'
         );
-    return new LoopAssetManager(vodToLoop);
+    const prerollVod = process.env.LOOP_PREROLL_URL
+      ? new URL(process.env.LOOP_PREROLL_URL)
+      : undefined;
+    const prerollVodDurationMs =
+      prerollVod && process.env.LOOP_PREROLL_DURATION_MS
+        ? parseInt(process.env.LOOP_PREROLL_DURATION_MS)
+        : undefined;
+    return new LoopAssetManager(vodToLoop, prerollVod, prerollVodDurationMs);
   }
 
   newChannelManager(

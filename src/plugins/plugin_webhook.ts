@@ -13,13 +13,18 @@ import { BasePlugin, PluginInterface } from './interface';
 import {
   getDefaultChannelAudioProfile,
   getDefaultChannelVideoProfile,
-  getDefaultChannelSubtitleProfile
+  getDefaultChannelSubtitleProfile,
+  getVodUrlWithPreroll
 } from './utils';
 
 export interface WebHookNextVodResponse {
   id: string;
   title: string;
   hlsUrl: string;
+  prerollUrl?: string;
+  prerollDurationMs?: number;
+  desiredOffsetMs?: number;
+  desiredDurationMs?: number;
 }
 
 class WebHookAssetManager implements IAssetManager {
@@ -36,10 +41,20 @@ class WebHookAssetManager implements IAssetManager {
     const response = await fetch(nextVodUrl.toString());
     if (response.ok) {
       const payload: WebHookNextVodResponse = await response.json();
+      let hlsUrl = payload.hlsUrl;
+      if (payload.prerollUrl && payload.prerollDurationMs) {
+        hlsUrl = getVodUrlWithPreroll(
+          hlsUrl,
+          payload.prerollUrl,
+          payload.prerollDurationMs
+        );
+      }
       const vodResponse: VodResponse = {
         id: payload.id,
         title: payload.title,
-        uri: payload.hlsUrl
+        uri: hlsUrl,
+        desiredDuration: payload.desiredDurationMs,
+        startOffset: payload.desiredOffsetMs
       };
       console.log(vodResponse);
       return vodResponse;

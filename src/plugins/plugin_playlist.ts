@@ -13,7 +13,8 @@ import { BasePlugin, PluginInterface } from './interface';
 import {
   getDefaultChannelAudioProfile,
   getDefaultChannelSubtitleProfile,
-  getDefaultChannelVideoProfile
+  getDefaultChannelVideoProfile,
+  getVodUrlWithPreroll
 } from './utils';
 
 interface PlaylistUrl {
@@ -56,8 +57,14 @@ function parsePlaylistUrlParam(playlistUrlParam: string): PlaylistUrl[] {
 class PlaylistAssetManager implements IAssetManager {
   private playlistUrls: PlaylistUrl[];
   private playlists: Map<string, Playlist>;
+  private prerollVod: URL = undefined;
+  private prerollDurationMs: number;
 
-  constructor(playlistUrls: PlaylistUrl[]) {
+  constructor(
+    playlistUrls: PlaylistUrl[],
+    prerollVod?: URL,
+    prerollDurationMs?: number
+  ) {
     this.playlistUrls = playlistUrls;
     this.playlists = new Map<string, Playlist>();
     this.playlistUrls.forEach((playlistUrl) => {
@@ -69,6 +76,8 @@ class PlaylistAssetManager implements IAssetManager {
       };
       this.playlists.set(playlist.id, playlist);
     });
+    this.prerollVod = prerollVod;
+    this.prerollDurationMs = prerollDurationMs;
   }
 
   async getNextVod(vodRequest: VodRequest): Promise<VodResponse> {
@@ -83,10 +92,18 @@ class PlaylistAssetManager implements IAssetManager {
         await this._updatePlaylist(vodRequest.playlistId);
       }
       if (playlist.position !== -1) {
+        let hlsUrl = playlist.hlsUrls[playlist.position].toString();
+        if (this.prerollVod) {
+          hlsUrl = getVodUrlWithPreroll(
+            playlist.hlsUrls[playlist.position].toString(),
+            this.prerollVod.toString(),
+            this.prerollDurationMs
+          );
+        }
         vodResponse = {
           id: `${playlist.position}`,
           title: `Item ${playlist.position}`,
-          uri: playlist.hlsUrls[playlist.position].toString()
+          uri: hlsUrl
         };
         playlist.position++;
         if (playlist.position > playlist.hlsUrls.length - 1) {
@@ -164,8 +181,19 @@ export class PlaylistPlugin extends BasePlugin implements PluginInterface {
     const param = process.env.PLAYLIST_URL
       ? process.env.PLAYLIST_URL
       : 'https://testcontent.eyevinn.technology/fast/fast-playlist.txt';
+    const prerollVod = process.env.PLAYLIST_PREROLL_URL
+      ? new URL(process.env.PLAYLIST_PREROLL_URL)
+      : undefined;
+    const prerollVodDurationMs =
+      prerollVod && process.env.PLAYLIST_PREROLL_DURATION_MS
+        ? parseInt(process.env.PLAYLIST_PREROLL_DURATION_MS)
+        : undefined;
 
-    return new PlaylistAssetManager(parsePlaylistUrlParam(param));
+    return new PlaylistAssetManager(
+      parsePlaylistUrlParam(param),
+      prerollVod,
+      prerollVodDurationMs
+    );
   }
 
   newChannelManager(
