@@ -136,7 +136,8 @@ docker run -p 8000:8000 \
   -e OPTS_USE_DEMUXED_AUDIO=false \
   -e OPTS_STITCH_ENDPOINT=http://lambda.eyevinn.technology/stitch \
   -e PLAYLIST_PREROLL_URL=https://lab.cdn.eyevinn.technology/sto-slate.mp4/manifest.m3u8 \
-  -e PLAYLIST_PREROLL_DURATION_MS=10000 npm start
+  -e PLAYLIST_PREROLL_DURATION_MS=10000 \
+  eyevinntechnology/fast-engine
 ```
 
 ### Multiview
