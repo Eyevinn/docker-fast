@@ -10,9 +10,9 @@ Based on VOD2Live Technology and the [open source Eyevinn Channel Engine library
 
 ## Quick Start
 
-### Hosted Engine (BETA)
+### Hosted Engine
 
-This FAST engine is available as Open Source as a Service (BETA) if you want to quickly try it out. More information in the [OSaaS HOWTO](osaas.md).
+This FAST engine is available as Open Source as a Service if you want to quickly try it out. More information in the [OSaaS HOWTO](osaas.md).
 
 ### Demo Installation
 
