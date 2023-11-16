@@ -189,6 +189,10 @@ export class PlaylistPlugin extends BasePlugin implements PluginInterface {
         ? parseInt(process.env.PLAYLIST_PREROLL_DURATION_MS)
         : undefined;
 
+    if (prerollVod && !prerollVod.toString().match(/\.m3u8$/)) {
+      throw new Error('Unsupported preroll VOD type: ' + prerollVod.toString());
+    }
+
     return new PlaylistAssetManager(
       parsePlaylistUrlParam(param),
       prerollVod,

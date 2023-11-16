@@ -102,6 +102,12 @@ export class LoopPlugin extends BasePlugin implements PluginInterface {
       prerollVod && process.env.LOOP_PREROLL_DURATION_MS
         ? parseInt(process.env.LOOP_PREROLL_DURATION_MS)
         : undefined;
+    if (!vodToLoop.toString().match(/\.m3u8$/)) {
+      throw new Error('Unsupported Loop VOD type: ' + vodToLoop.toString());
+    }
+    if (prerollVod && !prerollVod.toString().match(/\.m3u8$/)) {
+      throw new Error('Unsupported preroll VOD type: ' + prerollVod.toString());
+    }
     return new LoopAssetManager(vodToLoop, prerollVod, prerollVodDurationMs);
   }
 
