@@ -2,3 +2,4 @@ dist/
 dist-website/
 .parcel-cache/
 site/
+./setupMocks.js
