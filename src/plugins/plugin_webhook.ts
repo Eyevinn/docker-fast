@@ -37,7 +37,7 @@ class WebHookAssetManager implements IAssetManager {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getNextVod(vodRequest: VodRequest): Promise<VodResponse> {
     const nextVodUrl = this.webHook;
-    nextVodUrl.searchParams.append('channelId', vodRequest.playlistId);
+    nextVodUrl.searchParams.set('channelId', vodRequest.playlistId);
     const response = await fetch(nextVodUrl.toString());
     if (response.ok) {
       const payload: WebHookNextVodResponse = await response.json();

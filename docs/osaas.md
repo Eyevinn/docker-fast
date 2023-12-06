@@ -27,7 +27,6 @@ In return you will get:
 
 The channel's playback URL is [https://eyevinn.ce.prod.osaas.io/channels/mychannel/master.m3u8](https://web.player.eyevinn.technology/?manifest=https%3A%2F%2Feyevinn.ce.prod.osaas.io%2Fchannels%2Fmychannel%2Fmaster.m3u8)
 
-
 ## Create a channel with ad insertion opportunity
 
 To demonstrate how to insert an opportunity to place ads in a FAST channel you can place a preroll / ad-slate before each VOD. The FAST channel will be decorated with HLS ad tags that a Server-Side Ad Inserter will utilize to replace with ads from the inventory.
@@ -70,7 +69,6 @@ curl -X 'POST' \
 
 Where you would replace the `https://nextvod.dev.eyevinn.technology` with the URL to your webhook. For more information and example of a webhook read the [webhook-plugin documentation](plugins/webhook.md).
 
-
 ## Remove a channel
 
 To remove a channel you run the following and replace the `eyevinn-mychannel` with the channel id of your channel.
@@ -98,17 +96,17 @@ In return you should get something like this.
 ```json
 [
   {
-    "id":"eyevinn-houseads",
-    "name":"houseads",
-    "type":"Loop",
-    "url":"https://eyevinn.ce.prod.osaas.io/channels/houseads/master.m3u8"
+    "id": "eyevinn-houseads",
+    "name": "houseads",
+    "type": "Loop",
+    "url": "https://eyevinn.ce.prod.osaas.io/channels/houseads/master.m3u8"
   },
   {
-    "id":"eyevinn-mychannel",
-    "name":"mychannel",
-    "type":"Loop",
-    "url":"https://eyevinn.ce.prod.osaas.io/channels/mychannel/master.m3u8"
-    }
+    "id": "eyevinn-mychannel",
+    "name": "mychannel",
+    "type": "Loop",
+    "url": "https://eyevinn.ce.prod.osaas.io/channels/mychannel/master.m3u8"
+  }
 ]
 ```
 
