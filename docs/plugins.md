@@ -54,5 +54,6 @@ To provide a set of playlists the `PLAYLIST_URL` is a comma separated list of ch
 
 - `WEBHOOK_URL`: URL to the custom webhook, default is `http://localhost:8002/nextVod`
 - `WEBHOOK_CHANNEL_NAME`: The name of the channel (default `hls`)
+- `OPTS_WEBHOOK_APIKEY`: When set the `Authorization` header will be set to `Bearer <OPTS_WEBHOOK_APIKEY>` on the HTTP request to the webhook
 
 An example of a webhook and how this plugin can be used can be found [here](plugins/webhook.md).

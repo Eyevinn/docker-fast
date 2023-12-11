@@ -29,16 +29,27 @@ export interface WebHookNextVodResponse {
 
 class WebHookAssetManager implements IAssetManager {
   private webHook: URL;
+  private apiKey?: string;
 
-  constructor(webHook: URL) {
+  constructor({ webHook, apiKey }: { webHook: URL; apiKey?: string }) {
     this.webHook = webHook;
+    this.apiKey = apiKey;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getNextVod(vodRequest: VodRequest): Promise<VodResponse> {
     const nextVodUrl = this.webHook;
     nextVodUrl.searchParams.set('channelId', vodRequest.playlistId);
-    const response = await fetch(nextVodUrl.toString());
+    let headers;
+    if (this.apiKey) {
+      headers = {
+        Authorization: `Bearer ${this.apiKey}`
+      };
+    }
+    const response = await fetch(nextVodUrl.toString(), {
+      method: 'GET',
+      headers
+    });
     if (response.ok) {
       const payload: WebHookNextVodResponse = await response.json();
       let hlsUrl = payload.hlsUrl;
@@ -113,7 +124,8 @@ export class WebHookPlugin extends BasePlugin implements PluginInterface {
     const webHook = process.env.WEBHOOK_URL
       ? new URL(process.env.WEBHOOK_URL)
       : new URL('http://localhost:8002/nextVod');
-    return new WebHookAssetManager(webHook);
+    const apiKey = process.env.OPTS_WEBHOOK_APIKEY;
+    return new WebHookAssetManager({ webHook, apiKey });
   }
 
   newChannelManager(
