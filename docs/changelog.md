@@ -1,11 +1,38 @@
 # Release Notes
 
+## Version 1.9.0
+
+New Features:
+
+- Option for the WebHook plugin to provide api-key on webhook request
+
+Channel Engine v4.3.11 including the following bugfixes and features:
+
+- Add Reset by Channel feature
+- Option to protect session health endpoint with a key
+- Fix timeOffset - Once enabled, Forever
+- Fix missing Newlines in Dummy Webvtt Response
+- Fix performance bottlenecks when running in High Availability mode with Redis. 
+- Fix disable eventstream by default
+- Fix HA & Demux - Audio Increment Not Respecting Position Diff-Threshold
+- Fix Subtitle Track Playhead is dependant Of Video Track
+- Fix Wrong Audio M3U8 When Request Is Mid-Loading Next Vod
+- Fix add subtitle media sequence data to insertSlate function
+
 ## Version 1.8.0
 
 New Features:
 
 - All plugins now supporting insertion of prerolls (house ads). This functionality requires an external stitcher endpoint.
 - WebHook plugin now supports trimming of VOD by setting a start offset and / or duration.
+
+### Version 1.8.1
+
+Verify URLs that must be HLS URLs 
+
+### Version 1.8.2
+
+The channelId query param was appended on each request
 
 ## Version 1.7.0
 
