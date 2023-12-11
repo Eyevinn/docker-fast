@@ -36,6 +36,7 @@ To produce a channel based on a txt file with a list of VOD URLs:
 docker run -d -p 8000:8000 \
   -e FAST_PLUGIN=Playlist \
   -e PLAYLIST_URL=https://testcontent.eyevinn.technology/fast/fast-playlist.txt \
+  -e OPTS_USE_DEMUXED_AUDIO=false \
   eyevinntechnology/fast-engine
 ```
 
