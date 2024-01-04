@@ -4,6 +4,7 @@ import {
   SubtitleTracks
 } from 'eyevinn-channel-engine';
 import { Language, StitchPayload } from './interface';
+import fetch from 'node-fetch';
 
 import { uuid } from 'uuidv4';
 
@@ -261,10 +262,14 @@ export function getVodUrlWithPreroll(
 }
 
 export async function resolveRedirect(url: string) {
-  const response = await fetch(url);
-  if (response.redirected) {
-    console.log('Redirect: ' + response.url);
-    return response.url || url;
+  try {
+    const response = await fetch(url);
+    if (response.redirected) {
+      console.log('Redirect: ' + response.url);
+      return response.url || url;
+    }
+  } catch (err) {
+    console.error(err);
   }
   return url;
 }
