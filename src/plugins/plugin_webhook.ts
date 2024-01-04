@@ -14,7 +14,8 @@ import {
   getDefaultChannelAudioProfile,
   getDefaultChannelVideoProfile,
   getDefaultChannelSubtitleProfile,
-  getVodUrlWithPreroll
+  getVodUrlWithPreroll,
+  resolveRedirect
 } from './utils';
 
 export interface WebHookNextVodResponse {
@@ -52,7 +53,7 @@ class WebHookAssetManager implements IAssetManager {
     });
     if (response.ok) {
       const payload: WebHookNextVodResponse = await response.json();
-      let hlsUrl = payload.hlsUrl;
+      let hlsUrl = await resolveRedirect(payload.hlsUrl);
       if (payload.prerollUrl && payload.prerollDurationMs) {
         hlsUrl = getVodUrlWithPreroll(
           hlsUrl,

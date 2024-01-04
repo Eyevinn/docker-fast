@@ -37,7 +37,7 @@ describe('webhook plugin', () => {
     expect(fetchMock.mock.calls[0][0]).toEqual(
       'http://localhost:8002/nextVod?channelId=test'
     );
-    expect(fetchMock.mock.calls[1][0]).toEqual(
+    expect(fetchMock.mock.calls[2][0]).toEqual(
       'http://localhost:8002/nextVod?channelId=test'
     );
   });
