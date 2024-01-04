@@ -14,7 +14,8 @@ import {
   getDefaultChannelAudioProfile,
   getDefaultChannelSubtitleProfile,
   getDefaultChannelVideoProfile,
-  getVodUrlWithPreroll
+  getVodUrlWithPreroll,
+  resolveRedirect
 } from './utils';
 
 interface PlaylistUrl {
@@ -92,7 +93,9 @@ class PlaylistAssetManager implements IAssetManager {
         await this._updatePlaylist(vodRequest.playlistId);
       }
       if (playlist.position !== -1) {
-        let hlsUrl = playlist.hlsUrls[playlist.position].toString();
+        let hlsUrl = await resolveRedirect(
+          playlist.hlsUrls[playlist.position].toString()
+        );
         if (this.prerollVod) {
           hlsUrl = getVodUrlWithPreroll(
             playlist.hlsUrls[playlist.position].toString(),

@@ -259,3 +259,12 @@ export function getVodUrlWithPreroll(
   }
   return url;
 }
+
+export async function resolveRedirect(url: string) {
+  const response = await fetch(url);
+  if (response.redirected) {
+    console.log('Redirect: ' + response.url);
+    return response.url || url;
+  }
+  return url;
+}

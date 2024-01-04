@@ -12,7 +12,7 @@ Channel Engine v4.3.11 including the following bugfixes and features:
 - Option to protect session health endpoint with a key
 - Fix timeOffset - Once enabled, Forever
 - Fix missing Newlines in Dummy Webvtt Response
-- Fix performance bottlenecks when running in High Availability mode with Redis. 
+- Fix performance bottlenecks when running in High Availability mode with Redis.
 - Fix disable eventstream by default
 - Fix HA & Demux - Audio Increment Not Respecting Position Diff-Threshold
 - Fix Subtitle Track Playhead is dependant Of Video Track
@@ -28,7 +28,7 @@ New Features:
 
 ### Version 1.8.1
 
-Verify URLs that must be HLS URLs 
+Verify URLs that must be HLS URLs
 
 ### Version 1.8.2
 

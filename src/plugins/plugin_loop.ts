@@ -13,7 +13,8 @@ import {
   getDefaultChannelAudioProfile,
   getDefaultChannelVideoProfile,
   getDefaultChannelSubtitleProfile,
-  getVodUrlWithPreroll
+  getVodUrlWithPreroll,
+  resolveRedirect
 } from './utils';
 
 class LoopAssetManager implements IAssetManager {
@@ -30,6 +31,7 @@ class LoopAssetManager implements IAssetManager {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getNextVod(vodRequest: VodRequest): Promise<VodResponse> {
     let hlsUrl = this.vodToLoop.toString();
+    hlsUrl = await resolveRedirect(this.vodToLoop.toString());
     if (this.prerollVod) {
       hlsUrl = getVodUrlWithPreroll(
         this.vodToLoop.toString(),
