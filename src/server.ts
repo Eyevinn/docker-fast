@@ -29,6 +29,12 @@ try {
   const defaultSlateUri = process.env.OPTS_DEFAULT_SLATE_URI
     ? process.env.OPTS_DEFAULT_SLATE_URI
     : 'https://lab.cdn.eyevinn.technology/sto-slate.mp4/manifest.m3u8';
+  const slateDuration = process.env.OPTS_SLATE_DURATION_MS
+    ? parseInt(process.env.OPTS_SLATE_DURATION_MS)
+    : 4000;
+  const slateRepetitions = process.env.OPTS_SLATE_REPETITIONS
+    ? parseInt(process.env.OPTS_SLATE_REPETITIONS)
+    : 10;
   const heartbeat = process.env.OPTS_HEARTBEAT_URL
     ? process.env.OPTS_HEARTBEAT_URL
     : '/';
@@ -39,6 +45,8 @@ try {
   const engine = new ChannelEngine(plugin.newAssetManager(), {
     heartbeat,
     defaultSlateUri,
+    slateDuration,
+    slateRepetitions,
     useDemuxedAudio,
     useVTTSubtitles,
     vttBasePath,

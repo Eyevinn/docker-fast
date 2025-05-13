@@ -22,6 +22,7 @@ export interface WebHookNextVodResponse {
   id: string;
   title: string;
   hlsUrl: string;
+  type: string; // 'gap' or null
   prerollUrl?: string;
   prerollDurationMs?: number;
   desiredOffsetMs?: number;
@@ -65,6 +66,7 @@ class WebHookAssetManager implements IAssetManager {
         id: payload.id,
         title: payload.title,
         uri: hlsUrl,
+        type: payload.type === 'gap' ? 'gap' : null,
         desiredDuration: payload.desiredDurationMs,
         startOffset: payload.desiredOffsetMs
       };
