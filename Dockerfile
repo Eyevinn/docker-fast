@@ -4,7 +4,7 @@ FROM ubuntu:latest
 ##
 RUN apt-get update
 RUN apt-get install -y curl
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get install -y nodejs
 RUN apt-get install -y make gcc g++ patch
 
@@ -14,7 +14,7 @@ RUN npm install
 RUN npm run build
 RUN npm run build:ui
 
-FROM node:16-slim
+FROM node:18-slim
 
 WORKDIR /app
 COPY --from=0 /src/dist ./dist
