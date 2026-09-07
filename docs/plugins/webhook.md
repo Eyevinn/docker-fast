@@ -14,6 +14,8 @@ interface NextVodResponse {
   hlsUrl: string;
   prerollUrl?: string;
   prerollDurationMs?: number;
+  bumperUrl?: string;
+  bumperDurationMs?: number;
   desiredOffsetMs?: number;
   desiredDurationMs?: number;
 }
@@ -59,3 +61,18 @@ docker run -d -p 8000:8000 \
 ```
 
 You are then good to go using a custom webhook to control what should be played up next in the channel available at: http://localhost:8000/channels/mychannel/master.m3u8
+
+## Response fields
+
+| Field               | Type      | Description                                           |
+| ------------------- | --------- | ----------------------------------------------------- |
+| `id`                | `string`  | Unique identifier of the VOD.                         |
+| `title`             | `string`  | Title of the VOD.                                     |
+| `hlsUrl`            | `string`  | URL to the HLS manifest of the VOD to play next.      |
+| `type`              | `string`  | Set to `gap` to insert a gap, otherwise omit.         |
+| `prerollUrl`        | `string?` | Optional URL to a preroll to prepend before the VOD.  |
+| `prerollDurationMs` | `number?` | Optional duration of the preroll in milliseconds.     |
+| `bumperUrl`         | `string?` | Optional URL to a bumper associated with the VOD.     |
+| `bumperDurationMs`  | `number?` | Optional duration of the bumper in milliseconds.      |
+| `desiredOffsetMs`   | `number?` | Optional start offset into the VOD in milliseconds.   |
+| `desiredDurationMs` | `number?` | Optional desired duration of the VOD in milliseconds. |
