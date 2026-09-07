@@ -67,6 +67,28 @@ describe('webhook plugin', () => {
     }
   });
 
+  test('parses response containing bumper fields without error', async () => {
+    fetchMock.mockResponse(
+      JSON.stringify({
+        hlsUrl: 'https://vod.dummy/foo.m3u8',
+        id: 'dummy',
+        title: 'dummytitle',
+        bumperUrl: 'https://vod.dummy/bumper.m3u8',
+        bumperDurationMs: 5000
+      })
+    );
+
+    const plugin = new WebHookPlugin();
+    const assetManager = plugin.newAssetManager();
+    const nextVod = await assetManager.getNextVod({
+      sessionId: 'dummy',
+      playlistId: 'test'
+    });
+    expect(nextVod.uri).toEqual('https://vod.dummy/foo.m3u8');
+    expect(nextVod.id).toEqual('dummy');
+    expect(nextVod.title).toEqual('dummytitle');
+  });
+
   test('does not provides apikey on http request if not enabled', async () => {
     process.env.OPTS_WEBHOOK_APIKEY = undefined;
 

@@ -25,6 +25,8 @@ export interface WebHookNextVodResponse {
   type: string; // 'gap' or null
   prerollUrl?: string;
   prerollDurationMs?: number;
+  bumperUrl?: string;
+  bumperDurationMs?: number;
   desiredOffsetMs?: number;
   desiredDurationMs?: number;
 }
@@ -60,6 +62,16 @@ class WebHookAssetManager implements IAssetManager {
           hlsUrl,
           payload.prerollUrl,
           payload.prerollDurationMs
+        );
+      }
+      // Optional bumper fields are parsed here for forward-compatibility.
+      // Stitching the bumper into the VOD payload is handled by a separate
+      // (currently blocked) change, so we only read them for now.
+      const bumperUrl = payload.bumperUrl;
+      const bumperDurationMs = payload.bumperDurationMs;
+      if (bumperUrl && bumperDurationMs) {
+        console.log(
+          `Received bumper ${bumperUrl} (${bumperDurationMs}ms) from webhook`
         );
       }
       const vodResponse: VodResponse = {
