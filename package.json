@@ -57,6 +57,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
+    "@eyevinn/m3u8": "^0.5.8",
     "@eyevinn/schedule-service-adapter": "^0.4.1",
     "eyevinn-channel-engine": "5.0.0",
     "finalhandler": "^1.2.0",

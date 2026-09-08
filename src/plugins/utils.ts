@@ -282,9 +282,25 @@ export function getPreferredVideoCodecProfile(): VideoCodecFamily[] {
 /**
  * Build a master-manifest loader that fetches the source master and filters it
  * to the configured single video codec family before it reaches `HLSVod`, so
- * bandwidth buckets never mix codecs (docker-fast#65). Suitable for use as the
- * `_injectMasterManifest` argument of `HLSVod.load(...)` where docker-fast
- * controls that call.
+ * bandwidth buckets never mix codecs (docker-fast#65).
+ *
+ * This returns a function shaped for the `_injectMasterManifest` argument of
+ * `HLSVod.load(_injectMasterManifest, ...)` (see `@eyevinn/hls-vodtolive`
+ * index.js: `load()` pipes `_injectMasterManifest()` into the parser instead of
+ * self-fetching the master).
+ *
+ * BLOCKED ON UPSTREAM — not yet wired into docker-fast's runtime. docker-fast
+ * does not call `HLSVod.load()`; `eyevinn-channel-engine` does, from inside
+ * `Session` (dist/engine/session.js: `new HLSVod(vodResponse.uri, ...)` then
+ * `currentVod.load()` with no master injector). The only lever docker-fast has
+ * over a VOD source is the `uri` string it returns from
+ * `IAssetManager.getNextVod` — `ChannelEngineOpts` exposes no master-manifest
+ * injector option and `VodResponse` carries no loader/stream field. Until the
+ * engine surfaces such a hook (e.g. a `masterManifestLoader` option, or a
+ * `VodResponse.masterManifestLoader` callback threaded into
+ * `HLSVod.load(...)`), this loader cannot run at request time. See the codec
+ * filter unit tests, which exercise this loader directly against `HLSVod.load`,
+ * and issue #65 for the upstream tracking.
  */
 export function createConfiguredMasterLoader(masterUri: string) {
   return createCodecFilteringMasterLoader(

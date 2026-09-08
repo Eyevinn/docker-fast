@@ -54,15 +54,17 @@ interface Segment {
 
 // Map an advertised CODECS string to the codec family we expect the segment
 // URIs to belong to in this fixture.
-function codecFamily(codecs: string): 'avc' | 'hevc' | 'unknown' {
+function codecFamily(codecs: string): 'avc' | 'hevc' | 'av1' | 'unknown' {
   if (/avc1/.test(codecs)) return 'avc';
   if (/hvc1|hev1/.test(codecs)) return 'hevc';
+  if (/av01/.test(codecs)) return 'av1';
   return 'unknown';
 }
 
-function segmentFamily(uri: string): 'avc' | 'hevc' | 'unknown' {
+function segmentFamily(uri: string): 'avc' | 'hevc' | 'av1' | 'unknown' {
   if (/avc_/.test(uri)) return 'avc';
   if (/hevc_/.test(uri)) return 'hevc';
+  if (/av1_/.test(uri)) return 'av1';
   return 'unknown';
 }
 
@@ -98,10 +100,10 @@ interface Vod {
 }
 
 function servedFamilyByBandwidth(vod: Vod): {
-  [bw: string]: 'avc' | 'hevc' | 'unknown';
+  [bw: string]: 'avc' | 'hevc' | 'av1' | 'unknown';
 } {
   const segments = vod.getMediaSegments();
-  const served: { [bw: string]: 'avc' | 'hevc' | 'unknown' } = {};
+  const served: { [bw: string]: 'avc' | 'hevc' | 'av1' | 'unknown' } = {};
   Object.keys(segments).forEach((bw) => {
     const firstSeg = segments[bw].find((s) => s.uri);
     served[bw] = firstSeg ? segmentFamily(firstSeg.uri as string) : 'unknown';
@@ -270,6 +272,36 @@ describe('multicodec HEVC+AVC master manifest — codec preference (docker-fast#
       expect(codecFamily(collidingProfiles[0].codecs || '')).toBe('hevc');
 
       const served = servedFamilyByBandwidth(vod);
+      const mismatches = profiles.filter((p) => {
+        const s = served[String(p.bw)];
+        return s && codecFamily(p.codecs || '') !== s;
+      });
+      expect(mismatches.length).toBe(0);
+    });
+
+    it('config can prefer av01: keeps only the av1 variant and serves AV1 segments', async () => {
+      // Same HEVC+AV1 source, but configured to prefer av01 explicitly. This
+      // exercises the av1_720p.m3u8 media fixture end to end (the surviving
+      // variant's media playlist is actually fetched and parsed), keeping the
+      // fixture set self-consistent.
+      const vod: Vod = new HLSVod('http://mock.example/master.m3u8');
+      await vod.load(
+        createCodecFilteringMasterLoader(fixtureStream('master_no_avc.m3u8'), [
+          'av01',
+          'hvc1'
+        ]),
+        mediaLoaderFor({ '2000000': 'av1_720p.m3u8' })
+      );
+
+      const profiles = vod.getUsageProfiles();
+      const collidingProfiles = profiles.filter(
+        (p) => String(p.bw) === '2000000'
+      );
+      expect(collidingProfiles.length).toBe(1);
+      expect(codecFamily(collidingProfiles[0].codecs || '')).toBe('av1');
+
+      const served = servedFamilyByBandwidth(vod);
+      expect(served['2000000']).toBe('av1');
       const mismatches = profiles.filter((p) => {
         const s = served[String(p.bw)];
         return s && codecFamily(p.codecs || '') !== s;
