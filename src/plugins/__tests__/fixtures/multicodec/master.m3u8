@@ -1,0 +1,10 @@
+#EXTM3U
+#EXT-X-VERSION:6
+# Multicodec master manifest fixture for docker-fast#36 repro.
+# Two variants advertise the SAME BANDWIDTH (2000000) but different codecs:
+# one AVC (avc1) and one HEVC (hvc1). This colliding bandwidth is the reported
+# trigger for the advertised-CODECS vs served-segment mismatch.
+#EXT-X-STREAM-INF:BANDWIDTH=2000000,RESOLUTION=1280x720,CODECS="avc1.4d401f"
+avc_720p.m3u8
+#EXT-X-STREAM-INF:BANDWIDTH=2000000,RESOLUTION=1280x720,CODECS="hvc1.1.6.L93.90"
+hevc_720p.m3u8
