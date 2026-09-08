@@ -1,0 +1,10 @@
+#EXTM3U
+#EXT-X-VERSION:6
+# Single-codec (AVC-only) master fixture for docker-fast#65.
+# Two AVC variants at distinct bandwidths. The codec filter must leave this
+# master unchanged (no variant dropped) since only one video codec family
+# is present.
+#EXT-X-STREAM-INF:BANDWIDTH=2000000,RESOLUTION=1280x720,CODECS="avc1.4d401f"
+avc_720p.m3u8
+#EXT-X-STREAM-INF:BANDWIDTH=4000000,RESOLUTION=1920x1080,CODECS="avc1.640028"
+avc_1080p.m3u8

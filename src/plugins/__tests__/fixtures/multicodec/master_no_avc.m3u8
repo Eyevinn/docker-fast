@@ -1,0 +1,10 @@
+#EXTM3U
+#EXT-X-VERSION:6
+# Multicodec master fixture with NO avc1 variant (HEVC + AV1) for docker-fast#65.
+# The default preference prefers avc1, which is absent here, so the filter must
+# fall back to the source's first-seen family (hvc1) rather than emptying the
+# master. Both variants collide on BANDWIDTH=2000000.
+#EXT-X-STREAM-INF:BANDWIDTH=2000000,RESOLUTION=1280x720,CODECS="hvc1.1.6.L93.90"
+hevc_720p.m3u8
+#EXT-X-STREAM-INF:BANDWIDTH=2000000,RESOLUTION=1280x720,CODECS="av01.0.05M.08"
+av1_720p.m3u8

@@ -5,6 +5,11 @@ import {
 } from 'eyevinn-channel-engine';
 import { Language, StitchPayload } from './interface';
 import fetch from 'node-fetch';
+import {
+  getPreferredVideoCodecs,
+  createCodecFilteringMasterLoader,
+  VideoCodecFamily
+} from './codec_filter';
 
 import { uuid } from 'uuidv4';
 
@@ -259,6 +264,33 @@ export function getVodUrlWithPreroll(
     );
   }
   return url;
+}
+
+/**
+ * Video codec-family preference used when a source master mixes multiple video
+ * codec families (e.g. AVC + HEVC). Configurable via
+ * `OPTS_PREFERRED_VIDEO_CODEC` (comma-separated HLS codec-family prefixes such
+ * as `hvc1,avc1`). Defaults to preferring `avc1` over `hvc1`.
+ *
+ * Single-codec sources are always passed through unchanged regardless of this
+ * setting — the preference only disambiguates multicodec masters (see #65).
+ */
+export function getPreferredVideoCodecProfile(): VideoCodecFamily[] {
+  return getPreferredVideoCodecs(process.env.OPTS_PREFERRED_VIDEO_CODEC);
+}
+
+/**
+ * Build a master-manifest loader that fetches the source master and filters it
+ * to the configured single video codec family before it reaches `HLSVod`, so
+ * bandwidth buckets never mix codecs (docker-fast#65). Suitable for use as the
+ * `_injectMasterManifest` argument of `HLSVod.load(...)` where docker-fast
+ * controls that call.
+ */
+export function createConfiguredMasterLoader(masterUri: string) {
+  return createCodecFilteringMasterLoader(
+    masterUri,
+    getPreferredVideoCodecProfile()
+  );
 }
 
 export async function resolveRedirect(url: string) {
