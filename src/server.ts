@@ -1,12 +1,52 @@
 import { ChannelEngine } from 'eyevinn-channel-engine';
 import { PluginFactory } from './plugin_factory';
+import {
+  absolutizeMasterVariants,
+  CODEC_FILTER_PATH,
+  filterMasterByCodecPreference,
+  getCodecPreference
+} from './plugins/utils';
 
 import FinalHandler from 'finalhandler';
 import ServeStatic from 'serve-static';
 import http from 'http';
+import fetch from 'node-fetch';
 
 const serve = ServeStatic('./dist/ui');
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
+  // Self-hosted codec-filtering master endpoint. Fetches an upstream HLS master,
+  // keeps only the preferred codec family's variants, and rewrites variant URIs
+  // to absolute so the engine still resolves them against the real origin.
+  if (req.url && req.url.split('?')[0] === CODEC_FILTER_PATH) {
+    try {
+      const query = new URL(req.url, 'http://localhost').searchParams;
+      const src = query.get('src');
+      const preference = getCodecPreference();
+      if (!src) {
+        res.statusCode = 400;
+        res.end('Missing src parameter');
+        return;
+      }
+      const upstream = await fetch(src);
+      if (!upstream.ok) {
+        res.statusCode = 502;
+        res.end('Failed to fetch source master');
+        return;
+      }
+      const master = await upstream.text();
+      const filtered = absolutizeMasterVariants(
+        filterMasterByCodecPreference(master, preference),
+        src
+      );
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/vnd.apple.mpegurl');
+      res.end(filtered);
+    } catch (err) {
+      res.statusCode = 500;
+      res.end('Codec filter error: ' + (err as Error).message);
+    }
+    return;
+  }
   serve(req, res, FinalHandler(req, res));
 });
 server.listen(process.env.UI_PORT || 8001);

@@ -10,6 +10,7 @@ import {
 
 import { BasePlugin, PluginInterface } from './interface';
 import {
+  codecFilteredVodUri,
   getDefaultChannelAudioProfile,
   getDefaultChannelVideoProfile,
   getDefaultChannelSubtitleProfile,
@@ -38,6 +39,8 @@ class LoopAssetManager implements IAssetManager {
         this.prerollVod.toString(),
         this.prerollDurationMs
       );
+    } else {
+      hlsUrl = codecFilteredVodUri(hlsUrl);
     }
     const vodResponse = {
       id: 'loop',
