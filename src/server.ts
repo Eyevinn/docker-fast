@@ -4,7 +4,9 @@ import {
   absolutizeMasterVariants,
   CODEC_FILTER_PATH,
   filterMasterByCodecPreference,
-  getCodecPreference
+  getCodecPreference,
+  UnsafeSourceUrlError,
+  validateSourceUrl
 } from './plugins/utils';
 
 import FinalHandler from 'finalhandler';
@@ -17,17 +19,26 @@ const server = http.createServer(async (req, res) => {
   // Self-hosted codec-filtering master endpoint. Fetches an upstream HLS master,
   // keeps only the preferred codec family's variants, and rewrites variant URIs
   // to absolute so the engine still resolves them against the real origin.
-  if (req.url && req.url.split('?')[0] === CODEC_FILTER_PATH) {
+  //
+  // Only registered when a codec preference is configured; otherwise the request
+  // falls through to the static handler (404). This shrinks the SSRF attack
+  // surface to only when the feature is actually enabled.
+  const preference = getCodecPreference();
+  if (preference && req.url && req.url.split('?')[0] === CODEC_FILTER_PATH) {
     try {
       const query = new URL(req.url, 'http://localhost').searchParams;
       const src = query.get('src');
-      const preference = getCodecPreference();
       if (!src) {
         res.statusCode = 400;
         res.end('Missing src parameter');
         return;
       }
-      const upstream = await fetch(src);
+      // Validate + pin the source before fetching to prevent read-SSRF: rejects
+      // non-http(s) schemes and hosts resolving to private/loopback/link-local/
+      // metadata ranges, and pins the connection to the validated IP (defeating
+      // DNS rebinding).
+      const { url, agent } = await validateSourceUrl(src);
+      const upstream = await fetch(url.toString(), { agent });
       if (!upstream.ok) {
         res.statusCode = 502;
         res.end('Failed to fetch source master');
@@ -42,8 +53,18 @@ const server = http.createServer(async (req, res) => {
       res.setHeader('Content-Type', 'application/vnd.apple.mpegurl');
       res.end(filtered);
     } catch (err) {
+      if (err instanceof UnsafeSourceUrlError) {
+        // Log detail server-side only; return a generic message so the endpoint
+        // cannot be used as an SSRF oracle.
+        console.error('Codec filter rejected source URL: ' + err.message);
+        res.statusCode = err.statusCode;
+        res.end('Source URL not permitted');
+        return;
+      }
+      // Log the real error server-side; never echo it to the client.
+      console.error('Codec filter error:', err);
       res.statusCode = 500;
-      res.end('Codec filter error: ' + (err as Error).message);
+      res.end('Codec filter error');
     }
     return;
   }
