@@ -57,3 +57,21 @@ To provide a set of playlists the `PLAYLIST_URL` is a comma separated list of ch
 - `OPTS_WEBHOOK_APIKEY`: When set the `Authorization` header will be set to `Bearer <OPTS_WEBHOOK_APIKEY>` on the HTTP request to the webhook
 
 An example of a webhook and how this plugin can be used can be found [here](plugins/webhook.md).
+
+## Codec Preference (all plugins)
+
+Some source HLS masters advertise several codec families (for example `avc1` and
+`hvc1`) for the same content. When variants of different families share the same
+bandwidth, the engine indexes variant playlists by bandwidth only, so the codec
+advertised in the `CODECS` attribute can end up pointing at segments of the other
+codec. To avoid this you can tell the engine to keep only one codec family from a
+multicodec source master.
+
+- `OPTS_CODEC_PREFERENCE`: Preferred video codec family for multicodec source
+  masters. Accepts standard HLS CODECS tokens `avc1` or `hvc1` (`hevc`/`hev1`
+  are treated as `hvc1`). When unset (default) source masters are passed through
+  unchanged. Single-codec masters are never altered even when this is set.
+- `OPTS_MASTER_FILTER_BASE_URL`: Base URL at which docker-fast's own HTTP server
+  is reachable, used to build the self-hosted filtered-master URL. Defaults to
+  `http://127.0.0.1:<UI_PORT>`; override it when docker-fast is reached at a
+  different address (e.g. behind a proxy).

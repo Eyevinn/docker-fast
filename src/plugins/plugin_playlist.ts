@@ -11,6 +11,7 @@ import fetch from 'node-fetch';
 
 import { BasePlugin, PluginInterface } from './interface';
 import {
+  codecFilteredVodUri,
   getDefaultChannelAudioProfile,
   getDefaultChannelSubtitleProfile,
   getDefaultChannelVideoProfile,
@@ -102,6 +103,8 @@ class PlaylistAssetManager implements IAssetManager {
             this.prerollVod.toString(),
             this.prerollDurationMs
           );
+        } else {
+          hlsUrl = codecFilteredVodUri(hlsUrl);
         }
         vodResponse = {
           id: `${playlist.position}`,

@@ -8,6 +8,7 @@ import {
   IStreamSwitchManager
 } from 'eyevinn-channel-engine';
 import { BasePlugin, PluginInterface } from './interface';
+import { codecFilteredVodUri } from './utils';
 
 const DEMO_NUM_CHANNELS = process.env.DEMO_NUM_CHANNELS
   ? parseInt(process.env.DEMO_NUM_CHANNELS, 10)
@@ -60,7 +61,7 @@ class AssetManager implements IAssetManager {
       const vodResponse = {
         id: vod.id,
         title: vod.title,
-        uri: vod.uri
+        uri: codecFilteredVodUri(vod.uri)
       };
       return vodResponse;
     } else {

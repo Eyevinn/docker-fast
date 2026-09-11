@@ -1,5 +1,5 @@
 /**
- * Characterization test for docker-fast#36 (repro ticket #63).
+ * Regression test for docker-fast#65 (fix for the repro landed in #63).
  *
  * Reported bug: an HLS master containing BOTH HEVC (hvc1) and AVC (avc1)
  * variants makes the engine advertise one codec in the master manifest CODECS
@@ -15,14 +15,17 @@
  * collapse to a single set of segments, so at least one advertised codec ends up
  * pointing at segments of the wrong codec.
  *
- * IMPORTANT: this test asserts the CURRENT (buggy) behavior so it PASSES today
- * and keeps CI green. It documents the mismatch (advertised codec != served
- * segment codec). The fix ticket (#65) will FLIP these assertions to require
- * that every advertised CODECS matches the codec of the segments served at that
- * bandwidth. Do not "fix" this test in isolation — update it as part of #65.
+ * The fix (#65) filters the source master to a single codec family INSIDE
+ * docker-fast — via `filterMasterByCodecPreference` — before the master reaches
+ * `@eyevinn/hls-vodtolive`. Once filtered, bandwidth buckets never mix codecs,
+ * so every advertised CODECS matches the codec of the segments served at that
+ * bandwidth. This test asserts that fixed behavior, and also verifies that a
+ * single-codec master is passed through unchanged.
  */
 import * as fs from 'fs';
 import * as path from 'path';
+import { Readable } from 'stream';
+import { filterMasterByCodecPreference } from '../utils';
 
 // eyevinn-channel-engine re-exports the HLSVod class from @eyevinn/hls-vodtolive,
 // which docker-fast pulls in transitively. Require it directly since it is plain
@@ -57,65 +60,76 @@ function segmentFamily(uri: string): 'avc' | 'hevc' | 'unknown' {
   return 'unknown';
 }
 
-describe('multicodec HEVC+AVC master manifest (docker-fast#36 repro)', () => {
-  const masterManifest = () =>
-    fs.createReadStream(path.join(FIXTURE_DIR, 'master.m3u8'));
+function readFixture(name: string): string {
+  return fs.readFileSync(path.join(FIXTURE_DIR, name), 'utf-8');
+}
 
-  // The engine loads variant media playlists keyed by bandwidth only. Because
-  // the two variants collide on bandwidth (2000000), this fetcher is called
-  // twice with the same key and can only return one of the two playlists per
-  // bandwidth — which is the crux of the bug.
-  const mediaManifest = (bandwidth: string | number) => {
-    const fname: { [bw: string]: string } = {
-      '2000000': 'hevc_720p.m3u8'
-    };
-    return fs.createReadStream(
-      path.join(FIXTURE_DIR, fname[String(bandwidth)] || 'hevc_720p.m3u8')
+type Vod = {
+  load: (
+    m: () => unknown,
+    mm: (bw?: string | number) => unknown
+  ) => Promise<void>;
+  getUsageProfiles: () => UsageProfile[];
+  getBandwidths: () => string[];
+  getMediaSegments: () => { [bw: string]: Segment[] };
+};
+
+// Load a VOD from the given (already codec-filtered) master text. After
+// filtering only one codec family remains, so the media loader returns that
+// family's playlist — mirroring how docker-fast serves the real source
+// segments. @eyevinn/hls-vodtolive calls the injected media loader with the
+// variant bandwidth only, so `expectedFamily` disambiguates the colliding bw.
+async function loadVodFromMaster(
+  masterText: string,
+  expectedFamily: 'avc' | 'hevc'
+): Promise<Vod> {
+  const vod = new HLSVod('http://mock.example/master.m3u8') as Vod;
+  const masterLoader = () => Readable.from([masterText]);
+  const mediaLoader = () => {
+    const name = expectedFamily === 'hevc' ? 'hevc_720p.m3u8' : 'avc_720p.m3u8';
+    return fs.createReadStream(path.join(FIXTURE_DIR, name));
+  };
+  await vod.load(masterLoader, mediaLoader);
+  return vod;
+}
+
+describe('multicodec HEVC+AVC master manifest (docker-fast#65 fix)', () => {
+  it('keeps only avc1 variants when avc1 is preferred', async () => {
+    const master = filterMasterByCodecPreference(
+      readFixture('master.m3u8'),
+      'avc1'
     );
-  };
+    const vod = await loadVodFromMaster(master, 'avc');
 
-  let vod: {
-    load: (
-      m: () => unknown,
-      mm: (bw: string | number) => unknown
-    ) => Promise<void>;
-    getUsageProfiles: () => UsageProfile[];
-    getBandwidths: () => string[];
-    getMediaSegments: () => { [bw: string]: Segment[] };
-  };
-
-  beforeEach(async () => {
-    vod = new HLSVod('http://mock.example/master.m3u8');
-    await vod.load(masterManifest, mediaManifest);
-  });
-
-  it('advertises BOTH avc1 and hvc1 profiles at the colliding bandwidth', () => {
     const profiles = vod.getUsageProfiles();
-    const collidingProfiles = profiles.filter(
-      (p) => String(p.bw) === '2000000'
+    // Only the AVC variant survives the filter at the colliding bandwidth.
+    expect(profiles.length).toBe(1);
+    expect(codecFamily(profiles[0].codecs || '')).toBe('avc');
+  });
+
+  it('keeps only hvc1 variants when hvc1 is preferred', async () => {
+    const master = filterMasterByCodecPreference(
+      readFixture('master.m3u8'),
+      'hvc1'
     );
+    const vod = await loadVodFromMaster(master, 'hevc');
 
-    // The master manifest the engine emits gets one STREAM-INF per usage
-    // profile, so both codecs are advertised at bandwidth 2000000.
-    expect(collidingProfiles.length).toBe(2);
-    const advertisedCodecs = collidingProfiles
-      .map((p) => codecFamily(p.codecs || ''))
-      .sort();
-    expect(advertisedCodecs).toEqual(['avc', 'hevc']);
+    const profiles = vod.getUsageProfiles();
+    expect(profiles.length).toBe(1);
+    expect(codecFamily(profiles[0].codecs || '')).toBe('hevc');
   });
 
-  it('collapses the colliding bandwidth to a single served segment set', () => {
-    const bandwidths = vod.getBandwidths();
-    // Two variants, but only one bandwidth key survives.
-    expect(bandwidths).toEqual(['2000000']);
-  });
+  it('FIXED: every advertised CODECS matches the served-segment codec', async () => {
+    // Filter to a single family so bandwidth buckets never mix codecs.
+    const master = filterMasterByCodecPreference(
+      readFixture('master.m3u8'),
+      'avc1'
+    );
+    const vod = await loadVodFromMaster(master, 'avc');
 
-  it('BUG: advertised CODECS at a bandwidth do not all match the served-segment codec', () => {
     const profiles = vod.getUsageProfiles();
     const segments = vod.getMediaSegments();
 
-    // Determine the codec of the segments actually served per bandwidth by
-    // inspecting the media segment URIs the engine would deliver for master<bw>.m3u8.
     const servedFamilyByBw: { [bw: string]: 'avc' | 'hevc' | 'unknown' } = {};
     Object.keys(segments).forEach((bw) => {
       const firstSeg = segments[bw].find((s) => s.uri);
@@ -124,22 +138,36 @@ describe('multicodec HEVC+AVC master manifest (docker-fast#36 repro)', () => {
         : 'unknown';
     });
 
-    // At the colliding bandwidth the engine serves exactly one codec's segments.
-    expect(servedFamilyByBw['2000000']).toBe('hevc');
+    // At the colliding bandwidth the engine now serves AVC segments, matching
+    // the single advertised AVC profile.
+    expect(servedFamilyByBw['2000000']).toBe('avc');
 
-    // For each advertised profile, does the advertised codec match what is served?
     const mismatches = profiles.filter((p) => {
       const served = servedFamilyByBw[String(p.bw)];
       return served && codecFamily(p.codecs || '') !== served;
     });
 
-    // CURRENT BUGGY BEHAVIOR: the avc1 profile is advertised at bw 2000000 but
-    // the segments served there are HEVC — a genuine mismatch. This assertion
-    // documents docker-fast#36 and is expected to become `toBe(0)` once #65
-    // makes codec selection honor per-variant codecs.
-    expect(mismatches.length).toBeGreaterThan(0);
-    const mismatched = mismatches[0];
-    expect(codecFamily(mismatched.codecs || '')).toBe('avc');
-    expect(servedFamilyByBw[String(mismatched.bw)]).toBe('hevc');
+    // The whole point of #65: no advertised codec points at wrong-codec segments.
+    expect(mismatches.length).toBe(0);
+  });
+
+  it('leaves a single-codec master unchanged (no preference set)', () => {
+    const original = readFixture('avc_720p.m3u8');
+    // No preference => passthrough, even for a would-be multicodec master.
+    expect(filterMasterByCodecPreference(readFixture('master.m3u8'))).toBe(
+      readFixture('master.m3u8')
+    );
+    // A single-family master is untouched even when a preference is set.
+    const singleFamilyMaster = [
+      '#EXTM3U',
+      '#EXT-X-VERSION:6',
+      '#EXT-X-STREAM-INF:BANDWIDTH=2000000,RESOLUTION=1280x720,CODECS="avc1.4d401f"',
+      'avc_720p.m3u8'
+    ].join('\n');
+    expect(filterMasterByCodecPreference(singleFamilyMaster, 'avc1')).toBe(
+      singleFamilyMaster
+    );
+    // Guard against the fixture read being empty.
+    expect(original.length).toBeGreaterThan(0);
   });
 });
