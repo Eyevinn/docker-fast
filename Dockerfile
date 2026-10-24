@@ -1,12 +1,6 @@
-FROM ubuntu:latest
-## To build the UI with parcel we need to run it on latest ubuntu and why
-## we need this multi-stage build approach here
-##
-RUN apt-get update
-RUN apt-get install -y curl
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
-RUN apt-get install -y nodejs
-RUN apt-get install -y make gcc g++ patch
+## Build stage on the full node image (includes make, gcc, g++ and patch
+## needed for native modules and the parcel UI build)
+FROM node:24 AS build
 
 ADD . /src
 WORKDIR /src
@@ -14,11 +8,11 @@ RUN npm install
 RUN npm run build
 RUN npm run build:ui
 
-FROM node:18-slim
+FROM node:24-slim
 
 WORKDIR /app
-COPY --from=0 /src/dist ./dist
-COPY --from=0 /src/package.json ./
+COPY --from=build /src/dist ./dist
+COPY --from=build /src/package.json ./
 RUN npm install --omit=dev
 
 ENTRYPOINT [ "npm", "start" ]
