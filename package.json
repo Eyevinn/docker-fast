@@ -38,7 +38,7 @@
   ],
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=24.22.1"
+    "node": "^22.23.4 || >=24.22.1"
   },
   "devDependencies": {
     "@types/jest": "^29.2.2",
